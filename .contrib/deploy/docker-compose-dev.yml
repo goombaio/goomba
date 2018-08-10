@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+
+  nats:
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
+
+  goomba:
+    build: ../../
+    ports:
+      - "8081:8081"
+      - "8082:8082"
+    volumes:
+      - ../../:/opt/goomba/
