@@ -15,25 +15,24 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package goomba
+package daemon
 
 import (
-	"fmt"
-
-	"github.com/spf13/cobra"
+	"github.com/goombaio/goomba/client"
+	"github.com/goombaio/goomba/server"
 )
 
-func init() {
-	RootCmd.AddCommand(VersionCmd)
+// Config is the configuration or the options for the Goomba daemon.
+type Config struct {
+	Client *client.Config
+	Server *server.Config
 }
 
-// VersionCmd represents the version command
-var VersionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Show version information",
-	Long:  `Show application version information`,
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("%s %s\n", "goomba", RootCmd.Version)
-	},
+// DefaultConfig is a the baseline configuration or options for Goomba.
+func DefaultConfig() *Config {
+	config := &Config{
+		Client: client.DefaultConfig(),
+		Server: server.DefaultConfig(),
+	}
+	return config
 }

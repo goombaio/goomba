@@ -40,7 +40,7 @@ func main() {
 
 // showVersionInfo returns version and build information
 func showVersionInfo(version, build string) string {
-	tpl := "version %s build %s\n"
+	tpl := "version %s build %s"
 	output := fmt.Sprintf(tpl, version, build)
 	return output
 }

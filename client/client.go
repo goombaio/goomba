@@ -15,25 +15,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package goomba
+package client
 
 import (
-	"fmt"
-
-	"github.com/spf13/cobra"
+	"github.com/goombaio/log"
 )
 
-func init() {
-	RootCmd.AddCommand(VersionCmd)
+// Client ...
+type Client struct {
+	config *Config
+	logger log.Logger
 }
 
-// VersionCmd represents the version command
-var VersionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Show version information",
-	Long:  `Show application version information`,
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("%s %s\n", "goomba", RootCmd.Version)
-	},
+// NewClient ...
+func NewClient(logger log.Logger, config *Config) *Client {
+	if !config.Enabled {
+		return nil
+	}
+
+	client := &Client{
+		logger: logger,
+		config: config,
+	}
+	return client
 }

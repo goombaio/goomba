@@ -18,8 +18,11 @@
 package goomba
 
 import (
-	"fmt"
+	"os"
 
+	"github.com/goombaio/goomba/daemon"
+
+	"github.com/goombaio/log"
 	"github.com/spf13/cobra"
 )
 
@@ -34,6 +37,17 @@ var StartCmd = &cobra.Command{
 	Long:  `Start goomba services reading configuration`,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("start goomba..")
+		loggerOutput := os.Stderr
+		logger := log.NewLogger(loggerOutput)
+
+		config := daemon.DefaultConfig()
+
+		daemon := daemon.NewDaemon(logger, config)
+
+		err := daemon.Run()
+		if err != nil {
+			logger.Error(err, "running goomba")
+			os.Exit(1)
+		}
 	},
 }

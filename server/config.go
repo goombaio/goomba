@@ -15,25 +15,17 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package goomba
+package server
 
-import (
-	"fmt"
-
-	"github.com/spf13/cobra"
-)
-
-func init() {
-	RootCmd.AddCommand(VersionCmd)
+// Config ...
+type Config struct {
+	Enabled bool
 }
 
-// VersionCmd represents the version command
-var VersionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Show version information",
-	Long:  `Show application version information`,
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("%s %s\n", "goomba", RootCmd.Version)
-	},
+// DefaultConfig is a the baseline configuration or options for Goomba server.
+func DefaultConfig() *Config {
+	config := &Config{
+		Enabled: false,
+	}
+	return config
 }

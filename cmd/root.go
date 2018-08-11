@@ -23,10 +23,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-)
 
-var (
-	cfgFile string
+	"github.com/goombaio/log"
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -44,9 +42,11 @@ var RootCmd = &cobra.Command{
 // appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+	logger := log.NewLogger(os.Stderr)
+
 	err := RootCmd.Execute()
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err, "")
 		os.Exit(1)
 	}
 }
@@ -58,6 +58,8 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	logger := log.NewLogger(os.Stderr)
+
 	viper.SetConfigName("goomba")
 	viper.SetConfigType("json")
 
@@ -69,7 +71,7 @@ func initConfig() {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Printf("Can't read config file %s.\n", err)
+		logger.Error(err, "Can't read config file")
 		os.Exit(1)
 	}
 
