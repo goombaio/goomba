@@ -28,11 +28,11 @@ import (
 var RootCmd = &cobra.Command{
 	Use:   "goomba",
 	Short: "Goomba short",
-	Long:  `Goomba long`,
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Usage()
-		os.Exit(0)
-	},
+	Long:  `Goomba long description`,
+	// Run: func(cmd *cobra.Command, args []string) {
+	//	cmd.Usage()
+	//	os.Exit(0)
+	// },
 }
 
 // Execute adds all child commands to the root command and sets flags
