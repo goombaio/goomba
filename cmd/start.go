@@ -41,13 +41,9 @@ var StartCmd = &cobra.Command{
 		logger := log.NewLogger(loggerOutput)
 
 		config := daemon.DefaultConfig()
+		// TODO: Merge default configuration with loaded configuration
 
 		daemon := daemon.NewDaemon(logger, config)
-
-		err := daemon.Run()
-		if err != nil {
-			logger.Error(err, "running goomba")
-			os.Exit(1)
-		}
+		daemon.Start()
 	},
 }

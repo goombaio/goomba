@@ -18,6 +18,11 @@
 package daemon
 
 import (
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/goombaio/goomba/client"
 	"github.com/goombaio/goomba/server"
 	"github.com/goombaio/log"
@@ -30,25 +35,30 @@ type Daemon struct {
 
 	Client *client.Client
 	Server *server.Server
+
+	signalChan chan os.Signal
+	exitChan   chan int
 }
 
 // NewDaemon ...
 func NewDaemon(logger log.Logger, config *Config) *Daemon {
 	daemon := &Daemon{
-		config: config,
-		logger: logger,
+		config:     config,
+		logger:     logger,
+		signalChan: make(chan os.Signal, 1),
+		exitChan:   make(chan int, 1),
 	}
-
-	logger.Info("Starting goomba..")
 	return daemon
 }
 
-// Run ...
-func (d *Daemon) Run() error {
+// Start ...
+func (d *Daemon) Start() {
+	d.logger.Info("Start goomba..")
+
 	d.setupServer()
 	d.setupClient()
 
-	return nil
+	d.handleSignals()
 }
 
 func (d *Daemon) setupServer() {
@@ -71,4 +81,58 @@ func (d *Daemon) setupClient() {
 
 	d.logger.Info("Client enabled..")
 	d.Client = client.NewClient(d.logger, d.config.Client)
+}
+
+// Stop ...
+func (d *Daemon) Stop() {
+	d.logger.Info("Stop goomba..")
+	os.Exit(0)
+}
+
+// handleSignals blocks until we get an ex-causing signal.
+//
+// Listens for the following signals:
+// - SIGINT: Triggers when the user types CRTL-c.
+// 			 Kill -SIGINT XXX
+// - SIGQUIT: Triggers when the user types CRTL-\.
+// 			  Also core dumps.
+// 			  Kill -SIGQUIT XXX
+// - SIGTERM: generic signal used to cause program termination.
+//			  The normal way to politely ask a program to terminate.
+// 			  Kill -SIGTERM XXX
+//
+// See: http://www.gnu.org/software/libc/manual/html_node/Termination-Signals.html#Termination-Signals
+func (d *Daemon) handleSignals() {
+	signal.Notify(d.signalChan, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
+	go func() {
+		for {
+			sig := <-d.signalChan
+			switch sig {
+			// kill -SIGINT XXXX or Ctrl+c
+			case syscall.SIGINT:
+				msg := fmt.Sprintf("Trap signal SIGINT: %s.", sig)
+				d.logger.Info(msg)
+				d.Stop()
+
+			// kill -SIGQUIT XXXX
+			case syscall.SIGQUIT:
+				msg := fmt.Sprintf("Trap signal SIGQUIT: %s.", sig)
+				d.logger.Info(msg)
+				d.exitChan <- 0
+
+			// kill -SIGTERM XXXX
+			case syscall.SIGTERM:
+				msg := fmt.Sprintf("Trace: Trap signal SIGTERM: %s.", sig)
+				d.logger.Info(msg)
+				d.exitChan <- 0
+
+			default:
+				msg := fmt.Sprintf("Unknown signal %s.", sig)
+				d.logger.Info(msg)
+				d.exitChan <- 1
+			}
+		}
+	}()
+	code := <-d.exitChan
+	os.Exit(code)
 }
