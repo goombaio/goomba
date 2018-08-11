@@ -55,6 +55,9 @@ lint:			## Lint source code
 
 deps:			## Install build dependencies
 	go get -u github.com/spf13/cobra/cobra
+	go get -u github.com/spf13/viper
+
+	go get -u github.com/goombaio/log
 
 dev-deps: deps
 dev-deps:		## Install dev and build dependencies

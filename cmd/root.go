@@ -22,6 +22,11 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+)
+
+var (
+	cfgFile string
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -53,5 +58,21 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	// Unimplemented
+	viper.SetConfigName("goomba")
+	viper.SetConfigType("json")
+
+	homePath := os.Getenv("HOME")
+	defaultPath := fmt.Sprintf("%s%s", homePath, "/.goomba/conf/")
+	viper.AddConfigPath(defaultPath)
+
+	viper.AutomaticEnv()
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Printf("Can't read config file %s.\n", err)
+		os.Exit(1)
+	}
+
+	// Dump loaded configuration
+	// fmt.Println(viper.AllSettings())
 }

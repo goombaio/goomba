@@ -15,32 +15,25 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package main
+package goomba
 
 import (
 	"fmt"
 
-	goomba "github.com/goombaio/goomba/cmd"
+	"github.com/spf13/cobra"
 )
 
-var (
-	// Version is the current version number using the semver standard.
-	Version string
-
-	// Build is the current build id represented by the last commit id.
-	Build string
-)
-
-func main() {
-	goomba.RootCmd.SetVersionTemplate(`{{with .Name}}{{printf "%s " .}}{{end}}{{printf "%s" .Version}}`)
-	goomba.RootCmd.Version = showVersionInfo(Version, Build)
-
-	goomba.Execute()
+func init() {
+	RootCmd.AddCommand(StartCmd)
 }
 
-// showVersionInfo returns version and build information
-func showVersionInfo(version, build string) string {
-	tpl := "version %s build %s\n"
-	output := fmt.Sprintf(tpl, version, build)
-	return output
+// StartCmd represents the start command
+var StartCmd = &cobra.Command{
+	Use:   "start",
+	Short: "Start goomba",
+	Long:  `Start goomba services reading configuration`,
+	Args:  cobra.NoArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("start goomba..")
+	},
 }
