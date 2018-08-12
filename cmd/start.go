@@ -34,7 +34,7 @@ func init() {
 var StartCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start goomba",
-	Long:  `Start goomba services reading configuration`,
+	Long:  `Start goomba services after reading configuration`,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		loggerOutput := os.Stderr
