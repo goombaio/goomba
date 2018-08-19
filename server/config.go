@@ -20,12 +20,14 @@ package server
 // Config ...
 type Config struct {
 	Enabled bool
+	Address string
 }
 
 // DefaultConfig is a the baseline configuration or options for Goomba server.
 func DefaultConfig() *Config {
 	config := &Config{
-		Enabled: false,
+		Enabled: true,
+		Address: ":7071",
 	}
 	return config
 }

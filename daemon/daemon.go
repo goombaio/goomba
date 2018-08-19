@@ -68,8 +68,9 @@ func (d *Daemon) setupServer() {
 		return
 	}
 
-	d.logger.Info("Server enabled..")
+	d.logger.Info("Server enabled.")
 	d.Server = server.NewServer(d.logger, d.config.Server)
+	_ = d.Server.Start()
 }
 
 func (d *Daemon) setupClient() {
@@ -79,13 +80,16 @@ func (d *Daemon) setupClient() {
 		return
 	}
 
-	d.logger.Info("Client enabled..")
+	d.logger.Info("Client enabled.")
 	d.Client = client.NewClient(d.logger, d.config.Client)
 }
 
 // Stop ...
 func (d *Daemon) Stop() {
 	d.logger.Info("Stop goomba..")
+	if d.config.Server.Enabled {
+		_ = d.Server.Stop()
+	}
 	os.Exit(0)
 }
 

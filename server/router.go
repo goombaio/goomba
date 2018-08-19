@@ -17,62 +17,21 @@
 
 package server
 
-import (
-	"fmt"
-	"net"
-	"net/rpc"
-
-	"github.com/goombaio/log"
-)
-
-// Server ...
-type Server struct {
-	config *Config
-	logger log.Logger
+// Router ...
+type Router struct {
 }
 
-// NewServer ...
-func NewServer(logger log.Logger, config *Config) *Server {
-	if !config.Enabled {
-		return nil
-	}
-
-	server := &Server{
-		logger: logger,
-		config: config,
-	}
-	return server
+// StatusRequest ...
+type StatusRequest struct {
 }
 
-// Start ...
-func (s *Server) Start() error {
-	s.logger.Info("Starting server..")
-
-	listener, err := net.Listen("tcp", s.config.Address)
-	if err != nil {
-		s.logger.Error(err, "can't start server")
-		return err
-	}
-
-	msg := fmt.Sprintf("Server listening at %s.", s.config.Address)
-	s.logger.Info(msg)
-
-	go func() {
-		for {
-			client, err := listener.Accept()
-			if err != nil {
-				s.logger.Error(err, "on incomming connection")
-			}
-			go rpc.ServeConn(client)
-		}
-	}()
-
-	return nil
+// StatusResponse ...
+type StatusResponse struct {
+	ServerAddress string
 }
 
-// Stop ...
-func (s *Server) Stop() error {
-	s.logger.Info("Stopping server..")
+// Status ...
+func (r *Router) Status(request *StatusRequest, response *StatusResponse) error {
 
 	return nil
 }

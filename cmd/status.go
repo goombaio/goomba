@@ -15,64 +15,40 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package server
+package goomba
 
 import (
 	"fmt"
-	"net"
-	"net/rpc"
+	"os"
+
+	"github.com/goombaio/goomba/daemon"
 
 	"github.com/goombaio/log"
+	"github.com/spf13/cobra"
 )
 
-// Server ...
-type Server struct {
-	config *Config
-	logger log.Logger
+func init() {
+	RootCmd.AddCommand(StatusCmd)
 }
 
-// NewServer ...
-func NewServer(logger log.Logger, config *Config) *Server {
-	if !config.Enabled {
-		return nil
-	}
+// StatusCmd represents the start command
+var StatusCmd = &cobra.Command{
+	Use:   "status",
+	Short: "Goomba status",
+	Long:  `Show goomba goomba status`,
+	Run: func(cmd *cobra.Command, args []string) {
+		loggerOutput := os.Stderr
+		_ = log.NewLogger(loggerOutput)
 
-	server := &Server{
-		logger: logger,
-		config: config,
-	}
-	return server
-}
+		config := daemon.DefaultConfig()
+		// TODO: Merge default configuration with loaded configuration
 
-// Start ...
-func (s *Server) Start() error {
-	s.logger.Info("Starting server..")
+		fmt.Println("Server:")
+		fmt.Println("-------")
+		fmt.Printf("Enabled: %v.\n", config.Server.Enabled)
 
-	listener, err := net.Listen("tcp", s.config.Address)
-	if err != nil {
-		s.logger.Error(err, "can't start server")
-		return err
-	}
-
-	msg := fmt.Sprintf("Server listening at %s.", s.config.Address)
-	s.logger.Info(msg)
-
-	go func() {
-		for {
-			client, err := listener.Accept()
-			if err != nil {
-				s.logger.Error(err, "on incomming connection")
-			}
-			go rpc.ServeConn(client)
-		}
-	}()
-
-	return nil
-}
-
-// Stop ...
-func (s *Server) Stop() error {
-	s.logger.Info("Stopping server..")
-
-	return nil
+		fmt.Println("Client:")
+		fmt.Println("-------")
+		fmt.Printf("Enabled: %v.\n", config.Client.Enabled)
+	},
 }
