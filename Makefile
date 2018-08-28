@@ -21,7 +21,7 @@ version:		## Show version information
 # Testing
 
 .PHONY: test
-test:			## Execute package tests 
+test:			## Execute package tests
 	go test -v $(PACKAGES)
 
 .PHONY: cover-profile
@@ -33,7 +33,7 @@ cover-profile:
 	rm -rf coverage.out
 
 .PHONY: cover
-cover: cover-profile	
+cover: cover-profile
 cover: 			## Generate test coverage data
 	go tool cover -func=coverage-all.out
 
@@ -44,7 +44,7 @@ cover-html:		## Generate coverage report
 
 .PHONY: coveralls
 codecov:
-	@echo "Unimplemented codecov"
+	bash <(curl -s https://codecov.io/bash)
 
 # Lint
 

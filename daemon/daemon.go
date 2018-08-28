@@ -23,6 +23,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/goombaio/goomba/api"
 	"github.com/goombaio/goomba/client"
 	"github.com/goombaio/goomba/server"
 	"github.com/goombaio/log"
@@ -55,8 +56,14 @@ func NewDaemon(logger log.Logger, config *Config) *Daemon {
 func (d *Daemon) Start() {
 	d.logger.Info("Start goomba..")
 
+	// Server
 	d.setupServer()
+
+	// Client
 	d.setupClient()
+
+	// API
+	d.setupAPI()
 
 	d.handleSignals()
 }
@@ -82,6 +89,10 @@ func (d *Daemon) setupClient() {
 
 	d.logger.Info("Client enabled.")
 	d.Client = client.NewClient(d.logger, d.config.Client)
+}
+
+func (d *Daemon) setupAPI() {
+	d.API = api.NewAPI(d.logger, d.config)
 }
 
 // Stop ...
