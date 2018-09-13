@@ -28,13 +28,11 @@ func main() {
 	output := os.Stdout
 	logger := log.NewFmtLogger(output)
 
-	logger.Log("Starting Goomba..")
-
 	c := cli.NewCLI()
 
 	err := c.Run()
 	if err != nil {
-		logger.Log("ERROR", err)
+		logger.Log("ERROR:", err)
 		os.Exit(1)
 	}
 }
