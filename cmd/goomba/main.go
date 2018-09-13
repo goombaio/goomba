@@ -20,6 +20,7 @@ package main
 import (
 	"os"
 
+	"github.com/goombaio/cli"
 	"github.com/goombaio/log"
 )
 
@@ -27,5 +28,9 @@ func main() {
 	output := os.Stdout
 	logger := log.NewFmtLogger(output)
 
-	logger.Log("Goomba!")
+	logger.Log("Starting Goomba..")
+
+	c := cli.NewCLI()
+
+	c.Run()
 }
