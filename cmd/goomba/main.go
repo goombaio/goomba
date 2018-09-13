@@ -17,8 +17,15 @@
 
 package goomba
 
-import "fmt"
+import (
+	"os"
+
+	"github.com/goombaio/log"
+)
 
 func main() {
-	fmt.Println("Goomba!")
+	output := os.Stdout
+	logger := log.NewFmtLogger(output)
+
+	logger.Log("Goomba!")
 }
