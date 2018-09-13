@@ -46,23 +46,20 @@ cover-html:		## Generate coverage report
 codecov:
 	bash <(curl -s https://codecov.io/bash)
 
-# Lint
+# BenchMarking
 
-lint:			## Lint source code
-	gometalinter --disable-all --enable=errcheck --enable=vet --enable=vetshadow
+.PHONY: benchmark
+benchmark:		## Execute package benchmarks 
+	go test -v $(PACKAGES) -benchmem -bench . 
 
 # Dependencies
 
 deps:			## Install build dependencies
-	go get -u github.com/spf13/cobra/cobra
-	go get -u github.com/spf13/viper
-
-	go get -u github.com/goombaio/log
+	go mod download
+	go mod verify
 
 dev-deps: deps
 dev-deps:		## Install dev and build dependencies
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install
 
 .PHONY: clean
 clean:			## Delete generated development environment
