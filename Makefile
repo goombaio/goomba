@@ -42,15 +42,15 @@ cover-html: cover-profile
 cover-html:		## Generate coverage report
 	go tool cover -html=coverage-all.out
 
-.PHONY: coveralls
+.PHONY: codecov
 codecov:
 	bash <(curl -s https://codecov.io/bash)
 
 # BenchMarking
 
 .PHONY: benchmark
-benchmark:		## Execute package benchmarks 
-	go test -v $(PACKAGES) -benchmem -bench . 
+benchmark:		## Execute package benchmarks
+	go test -v $(PACKAGES) -benchmem -bench .
 
 # Dependencies
 
