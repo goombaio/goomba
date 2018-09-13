@@ -32,5 +32,9 @@ func main() {
 
 	c := cli.NewCLI()
 
-	c.Run()
+	err := c.Run()
+	if err != nil {
+		logger.Log("ERROR", err)
+		os.Exit(1)
+	}
 }
