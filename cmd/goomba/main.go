@@ -40,9 +40,9 @@ func main() {
 
 	versionCommand := cli.NewCommand("version", "Show version information")
 	versionCommand.Run = func() error {
-		_, err := fmt.Fprintf(os.Stderr, "goomba v0.0.0\n")
+		fmt.Println("goomba v0.0.0")
 
-		return err
+		return nil
 	}
 
 	rootCommand.AddCommand(versionCommand)
