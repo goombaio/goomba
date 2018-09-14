@@ -18,6 +18,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/goombaio/cli"
@@ -28,7 +29,7 @@ func main() {
 	output := os.Stdout
 	logger := log.NewFmtLogger(output)
 
-	rootCommand := cli.NewCommand("goomba")
+	rootCommand := cli.NewCommand("goomba", "Goomba CLI")
 	rootCommand.Run = func() error {
 		if len(rootCommand.Args()) == 0 {
 			rootCommand.Usage()
@@ -36,6 +37,15 @@ func main() {
 
 		return nil
 	}
+
+	versionCommand := cli.NewCommand("version", "Show version information")
+	versionCommand.Run = func() error {
+		_, err := fmt.Fprintf(os.Stderr, "goomba v0.0.0\n")
+
+		return err
+	}
+
+	rootCommand.AddCommand(versionCommand)
 
 	err := rootCommand.Execute()
 	if err != nil {
