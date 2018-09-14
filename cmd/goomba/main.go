@@ -28,9 +28,16 @@ func main() {
 	output := os.Stdout
 	logger := log.NewFmtLogger(output)
 
-	c := cli.NewCLI()
+	rootCommand := cli.NewCommand("goomba")
+	rootCommand.Run = func() error {
+		if len(rootCommand.Args()) == 0 {
+			rootCommand.Usage()
+		}
 
-	err := c.Run()
+		return nil
+	}
+
+	err := rootCommand.Execute()
 	if err != nil {
 		logger.Log("ERROR:", err)
 		os.Exit(1)
