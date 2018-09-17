@@ -23,6 +23,7 @@ import (
 
 	"github.com/goombaio/cli"
 	"github.com/goombaio/goomba"
+	"github.com/goombaio/goomba/cmd"
 	"github.com/goombaio/log"
 )
 
@@ -80,7 +81,10 @@ func main() {
 
 		return err
 	}
+
 	rootCommand.AddCommand(versionCommand)
+
+	rootCommand.AddCommand(cmd.ServerCommand)
 
 	err := rootCommand.Execute()
 	if err != nil {

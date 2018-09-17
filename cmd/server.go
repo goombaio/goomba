@@ -15,4 +15,23 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package goomba
+package cmd
+
+import (
+	"github.com/goombaio/cli"
+)
+
+// ServerCommand ...
+var ServerCommand *cli.Command
+
+func init() {
+	ServerCommand = cli.NewCommand("server", "Runs a Goomba server")
+	ServerCommand.LongDescription = `server command starts a Goomba server and 
+runs until an interrupt is received. The server represents a single node in a
+cluster`
+	ServerCommand.Run = func(c *cli.Command) error {
+		c.Usage()
+
+		return nil
+	}
+}
