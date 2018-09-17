@@ -32,6 +32,10 @@ version:		## Show version information
 test:			## Execute package tests
 	go test -v $(PACKAGES)
 
+.PHONY: test-race
+test-race:
+	go test -race -v $(PACKAGES)
+
 cover-profile:
 	echo "mode: count" > coverage-all.out
 	$(foreach pkg,$(PACKAGES),\
