@@ -16,38 +16,3 @@
 // under the License.
 
 package goomba
-
-import (
-	"bytes"
-	"text/template"
-)
-
-const (
-	// VersionTemplate ...
-	VersionTemplate = `Goomba version {{.SemVer}}{{if .PreRelease}}-{{.PreRelease}}{{end}} build {{.BuildID}} at {{.Timestamp}}`
-)
-
-// Version ...
-type Version struct {
-	// SemVer ...
-	SemVer string
-
-	// BuildID ...
-	BuildID string
-
-	// Timestamp ...
-	Timestamp string
-
-	// PreReleaase ...
-	PreRelease string
-}
-
-// ShowVersion ...
-func (v *Version) ShowVersion() (string, error) {
-	buf := new(bytes.Buffer)
-
-	t := template.Must(template.New("versionTemplate").Parse(VersionTemplate))
-	err := t.Execute(buf, v)
-
-	return buf.String(), err
-}
