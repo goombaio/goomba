@@ -15,39 +15,28 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package main
+package cmd
 
 import (
-	"os"
-
-	"github.com/goombaio/goomba/cmd"
-	"github.com/goombaio/log"
+	"github.com/goombaio/cli"
 )
 
-var (
-	// VersionSemVer ...
-	VersionSemVer string
+// RootCommand ...
+var RootCommand *cli.Command
 
-	// VersionBuildID ...
-	VersionBuildID string
+func init() {
+	RootCommand = cli.NewCommand("goomba", "Goomba CLI")
+	RootCommand.LongDescription = `A workflow based data pipeline framework for golang. https://goomba.io`
+	RootCommand.Run = func(c *cli.Command) error {
+		c.Usage()
 
-	// VersionTimestamp ...
-	VersionTimestamp string
-
-	// VersionPreRelease ...
-	VersionPreRelease string
-)
-
-func main() {
-	output := os.Stdout
-	logger := log.NewFmtLogger(output)
-
-	cmd.RootCommand.AddCommand(cmd.ServerCommand)
-	cmd.RootCommand.AddCommand(cmd.VersionCommand)
-
-	err := cmd.Execute()
-	if err != nil {
-		logger.Log("ERROR:", err)
-		os.Exit(1)
+		return nil
 	}
+}
+
+// Execute ...
+func Execute() error {
+	err := RootCommand.Execute()
+
+	return err
 }
