@@ -18,7 +18,10 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/goombaio/cli"
+	"github.com/goombaio/goomba"
 )
 
 // VersionCommand ...
@@ -40,21 +43,20 @@ func init() {
 		// - Add --long support and show all info if it is used
 		//   https://github.com/goombaio/goomba/issues/2
 		//
-		c.Usage()
+		// c.Usage()
 
-		return nil
+		// return nil
 
-		/*
-			version := &goomba.Version{
-				SemVer:     "0.0.0",
-				BuildID:    "master-0000000",
-				Timestamp:  "0000-00-00.00:00:00.UTC",
-				PreRelease: "",
-			}
-			versionInformation, err := version.ShowVersion()
+		version := &goomba.Version{
+			SemVer:     "0.0.0",
+			BuildID:    "master-0000000",
+			Timestamp:  "0000-00-00.00:00:00.UTC",
+			PreRelease: "",
+		}
+		versionInformation, err := version.ShowVersion()
 
-			return err
-		*/
+		_, err = fmt.Fprintf(c.Output(), "%s\n", versionInformation)
 
+		return err
 	}
 }
