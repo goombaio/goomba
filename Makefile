@@ -4,20 +4,27 @@ PACKAGES = $(shell go list ./...)
 VERSION=`cat VERSION`
 BUILD=`git symbolic-ref HEAD 2> /dev/null | cut -b 12-`-`git log --pretty=format:%h -1`
 TIMESTAMP=`date -u '+%Y-%m-%d.%H:%M:%S.%Z'`
+DIST_BUILD=bin
 DIST_FOLDER=dist
-DIST_INCLUDE_FILES=README.md LICENSE VERSION
+DIST_INCLUDE_FILES=README.md LICENSE VERSION AUTHORS CONTRIBUTORS
 
 # Setup -ldflags option for go build here, interpolate the variable values
 LDFLAGS=-ldflags "-X main.VersionSemVer=${VERSION} -X main.VersionBuildID=${BUILD} -X main.VersionTimestamp=${TIMESTAMP}"
 
 # Build & Install
 
-install: clean		## Build and install package on your system
+install: clean
+install:		## Build and install package on your system (under $GOBIN)
 	go install $(LDFLAGS) -v $(PACKAGES)
+
+build: clean
+build:			## Build binary
+	mkdir -p bin
+	go build $(LDFLAGS) -o ${DIST_BUILD}/${BINARY} ${MAIN_PACKAGE}
 
 .PHONY: version
 version:		## Show version information
-	@echo $(VERSION)-$(BUILD)
+	@echo "Goomba version $(VERSION) build $(BUILD) at ${TIMESTAMP}"
 
 # Testing
 
@@ -25,7 +32,6 @@ version:		## Show version information
 test:			## Execute package tests
 	go test -v $(PACKAGES)
 
-.PHONY: cover-profile
 cover-profile:
 	echo "mode: count" > coverage-all.out
 	$(foreach pkg,$(PACKAGES),\
@@ -33,12 +39,10 @@ cover-profile:
 		tail -n +2 coverage.out >> coverage-all.out;)
 	rm -rf coverage.out
 
-.PHONY: cover
 cover: cover-profile
 cover: 			## Generate test coverage data
 	go tool cover -func=coverage-all.out
 
-.PHONY: cover-html
 cover-html: cover-profile
 cover-html:		## Generate coverage report
 	go tool cover -html=coverage-all.out
@@ -64,15 +68,10 @@ deps:			## Install build dependencies
 dev-deps: deps
 dev-deps:		## Install dev and build dependencies
 
-.PHONY: clean
 clean:			## Delete generated development environment
 	go clean
+	rm -rf bin
 	rm -rf coverage-all.out
-
-.PHONY: dist-clean
-dist-clean: clean
-dist-clean:			## Delete generated development environment
-	rm -rf dist
 
 # Lint
 
@@ -84,5 +83,74 @@ lint:			## Lint source code
 
 godoc-serve:		## Serve documentation (godoc format) for this package at port HTTP 9090
 	godoc -http=":9090"
+
+# Distribution
+
+dist-clean: clean
+dist-clean:		## Delete generated development environment
+	rm -rf dist
+
+dist: dist-linux dist-darwin dist-windows
+dist:			## Generate distribution binaries and packages
+
+dist-linux-386:
+	$(eval GOOS=linux)
+	$(eval GOARCH=386)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-linux-amd64:
+	$(eval GOOS=linux)
+	$(eval GOARCH=amd64)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-linux: dist-linux-386 dist-linux-amd64
+
+dist-darwin-386:
+	$(eval GOOS=darwin)
+	$(eval GOARCH=386)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-darwin-amd64:
+	$(eval GOOS=darwin)
+	$(eval GOARCH=amd64)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-darwin: dist-darwin-386 dist-darwin-amd64
+
+dist-windows-386:
+	$(eval GOOS=windows)
+	$(eval GOARCH=386)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-windows-amd64:
+	$(eval GOOS=windows)
+	$(eval GOARCH=amd64)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-windows: dist-windows-386 dist-windows-amd64
 
 include Makefile.help.mk
