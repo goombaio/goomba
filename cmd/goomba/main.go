@@ -22,7 +22,22 @@ import (
 	"os"
 
 	"github.com/goombaio/cli"
+	"github.com/goombaio/goomba"
 	"github.com/goombaio/log"
+)
+
+var (
+	// VersionSemVer ...
+	VersionSemVer string
+
+	// VersionBuildID ...
+	VersionBuildID string
+
+	// VersionTimestamp ...
+	VersionTimestamp string
+
+	// VersionPreRelease ...
+	VersionPreRelease string
 )
 
 func main() {
@@ -30,21 +45,41 @@ func main() {
 	logger := log.NewFmtLogger(output)
 
 	rootCommand := cli.NewCommand("goomba", "Goomba CLI")
-	rootCommand.Run = func() error {
-		if len(rootCommand.Args()) == 0 {
-			rootCommand.Usage()
-		}
+	rootCommand.Run = func(c *cli.Command) error {
+		c.Usage()
 
 		return nil
 	}
 
 	versionCommand := cli.NewCommand("version", "Show version information")
-	versionCommand.Run = func() error {
-		fmt.Println("goomba v0.0.0")
+	versionCommand.LongDescription = `version command shows the version 
+  information about this program. It consists in 3 parts; the first one is a 
+  canonical version following the semver specification. The second part is an 
+  ID that identifies a single build which has the same versionn, currently we 
+  use the git hash as this ID. And finally, the third part is a timestamp that 
+  reflects when the project was built`
+	versionCommand.Run = func(c *cli.Command) error {
+		// TODO:
+		// - Check if -h or --help is used and show subCommand Usage
+		//   https://github.com/goombaio/goomba/issues/1
+		// - By default only show SemVer & PreRelease is available
+		// - Add --long support and show all info if it is used
+		//   https://github.com/goombaio/goomba/issues/2
+		//
+		// c.Usage()
 
-		return nil
+		version := &goomba.Version{
+			SemVer:     VersionSemVer,
+			BuildID:    VersionBuildID,
+			Timestamp:  VersionTimestamp,
+			PreRelease: VersionPreRelease,
+		}
+		versionInformation, err := version.ShowVersion()
+
+		fmt.Println(versionInformation)
+
+		return err
 	}
-
 	rootCommand.AddCommand(versionCommand)
 
 	err := rootCommand.Execute()

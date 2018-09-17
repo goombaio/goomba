@@ -3,11 +3,12 @@ MAIN_PACKAGE=cmd/${BINARY}/main.go
 PACKAGES = $(shell go list ./...)
 VERSION=`cat VERSION`
 BUILD=`git symbolic-ref HEAD 2> /dev/null | cut -b 12-`-`git log --pretty=format:%h -1`
+TIMESTAMP=`date -u '+%Y-%m-%d.%H:%M:%S.%Z'`
 DIST_FOLDER=dist
 DIST_INCLUDE_FILES=README.md LICENSE VERSION
 
 # Setup -ldflags option for go build here, interpolate the variable values
-LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
+LDFLAGS=-ldflags "-X main.VersionSemVer=${VERSION} -X main.VersionBuildID=${BUILD} -X main.VersionTimestamp=${TIMESTAMP}"
 
 # Build & Install
 
@@ -67,6 +68,11 @@ dev-deps:		## Install dev and build dependencies
 clean:			## Delete generated development environment
 	go clean
 	rm -rf coverage-all.out
+
+.PHONY: dist-clean
+dist-clean: clean
+dist-clean:			## Delete generated development environment
+	rm -rf dist
 
 # Lint
 
