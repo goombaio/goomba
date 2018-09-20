@@ -23,30 +23,46 @@ import (
 )
 
 const (
-	// VersionTemplate ...
-	VersionTemplate = `Goomba version {{.SemVer}}{{if .PreRelease}}-{{.PreRelease}}{{end}} build {{.BuildID}} at {{.Timestamp}}`
+	// VersionTemplate is the tempate used to render the version information.
+	VersionTemplate = `Goomba version {{.SemVer}}{{if .PreRelease}}-{{.PreRelease}}{{end}}`
+
+	// LongVersionTemplate is the tempate used to render the version
+	// information.
+	LongVersionTemplate = `Goomba version {{.SemVer}}{{if .PreRelease}}-{{.PreRelease}}{{end}} build {{.BuildID}} at {{.Timestamp}}`
 )
 
 // Version ...
 type Version struct {
-	// SemVer ...
+	// SemVer is the current version number following the SemVer
+	// specification.
 	SemVer string
 
-	// BuildID ...
+	// BuildID is the current build ID (usually the latest git commit hash).
 	BuildID string
 
-	// Timestamp ...
+	// Timestamp is the timestamp when this application have been build.
 	Timestamp string
 
-	// PreReleaase ...
+	// PreRelease is the pre-release tag string of this application if it was
+	// provided.
 	PreRelease string
 }
 
-// ShowVersion ...
+// ShowVersion shows the short version information.
 func (v *Version) ShowVersion() (string, error) {
 	buf := new(bytes.Buffer)
 
 	t := template.Must(template.New("versionTemplate").Parse(VersionTemplate))
+	err := t.Execute(buf, v)
+
+	return buf.String(), err
+}
+
+// ShowLongVersion shows the long version information.
+func (v *Version) ShowLongVersion() (string, error) {
+	buf := new(bytes.Buffer)
+
+	t := template.Must(template.New("versionTemplate").Parse(LongVersionTemplate))
 	err := t.Execute(buf, v)
 
 	return buf.String(), err

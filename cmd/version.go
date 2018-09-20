@@ -19,6 +19,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/goombaio/cli"
 	"github.com/goombaio/goomba"
@@ -50,15 +51,17 @@ func init() {
 		//
 		// return nil
 
+		c.SetOutput(os.Stdout)
+
 		version := &goomba.Version{
 			SemVer:     "0.0.0",
 			BuildID:    "master-0000000",
 			Timestamp:  "0000-00-00.00:00:00.UTC",
 			PreRelease: "",
 		}
-		versionInformation, err := version.ShowVersion()
+		result, err := version.ShowVersion()
 
-		_, err = fmt.Fprintf(c.Output(), "%s\n", versionInformation)
+		_, err = fmt.Fprintf(c.Output(), "%s\n", result)
 
 		return err
 	}
