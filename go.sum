@@ -1,4 +1,4 @@
-github.com/goombaio/cli v0.0.0-20180917112339-4a975ec83362 h1:MxRKC3orKMNmn9Jbn6kW072bSGKPcEhHOf4At765O0c=
-github.com/goombaio/cli v0.0.0-20180917112339-4a975ec83362/go.mod h1:PIE4wnL2RdbwEWHTSbBZVN19z8CoyAMgrTDoJvNXZyk=
-github.com/goombaio/log v0.0.0-20180917113211-92f876dfff4b h1:Pz6tZr5ksWd1m9heHS0Y5CidVRYGYwjM8y6efNqyISY=
-github.com/goombaio/log v0.0.0-20180917113211-92f876dfff4b/go.mod h1:4SzIJyIMuV87Y+sY04tuNjStZP7juSaPsObSbKrClP0=
+github.com/goombaio/cli v0.0.0-20180920005631-41a430d1221e h1:2ahwVfSwWOBElZefOkyYwlp2ly18YTWdfwAnbpy6G/s=
+github.com/goombaio/cli v0.0.0-20180920005631-41a430d1221e/go.mod h1:PIE4wnL2RdbwEWHTSbBZVN19z8CoyAMgrTDoJvNXZyk=
+github.com/goombaio/log v0.0.0-20180919232442-e926f5158e55 h1:YB4vyh4CED/idyzYidZ7QJz6wVSSaaKTRIQDK2UBZnw=
+github.com/goombaio/log v0.0.0-20180919232442-e926f5158e55/go.mod h1:4SzIJyIMuV87Y+sY04tuNjStZP7juSaPsObSbKrClP0=
