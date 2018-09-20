@@ -94,7 +94,7 @@ dist-clean: clean
 dist-clean:		## Delete generated development environment
 	rm -rf dist
 
-dist: dist-linux dist-darwin dist-windows dist-freebsd
+dist: dist-linux dist-darwin dist-windows dist-freebsd dist-openbsd
 dist:			## Generate distribution binaries and packages
 
 dist-linux-386:
@@ -194,5 +194,25 @@ dist-freebsd-arm:
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 
 dist-freebsd: dist-freebsd-386 dist-freebsd-amd64 dist-freebsd-arm
+
+dist-openbsd-386:
+	$(eval GOOS=openbsd)
+	$(eval GOARCH=386)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-openbsd-amd64:
+	$(eval GOOS=openbsd)
+	$(eval GOARCH=amd64)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-openbsd: dist-openbsd-386 dist-openbsd-amd64
 
 include Makefile.help.mk
