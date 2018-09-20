@@ -37,7 +37,6 @@ Flags:
   -h, -help     Show help
 
 Use goomba [command] -help for more information about a command.
-...
 ```
 
 ## License
