@@ -28,7 +28,10 @@ import (
 var VersionCommand *cli.Command
 
 func init() {
-	VersionCommand = cli.NewCommand("version", "Show version information")
+	cmdName := "version"
+	cmdShortDescription := "Show version information"
+
+	VersionCommand = cli.NewCommand(cmdName, cmdShortDescription)
 	VersionCommand.LongDescription = `version command shows the version 
   information about this program. It consists in 3 parts; the first one is a 
   canonical version following the semver specification. The second part is an 
@@ -44,7 +47,7 @@ func init() {
 		//   https://github.com/goombaio/goomba/issues/2
 		//
 		// c.Usage()
-
+		//
 		// return nil
 
 		version := &goomba.Version{

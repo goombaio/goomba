@@ -25,26 +25,38 @@ import (
 )
 
 var (
-	// VersionSemVer ...
+	// VersionSemVer is the current version number following the SemVer
+	// specification.
 	VersionSemVer string
 
-	// VersionBuildID ...
+	// VersionBuildID is the current build ID (usually the latest git commit
+	// hash).
 	VersionBuildID string
 
-	// VersionTimestamp ...
+	// VersionTimestamp is the timestamp when this application have been build.
 	VersionTimestamp string
 
-	// VersionPreRelease ...
+	// VersionPreRelease is the pre-release tag string of this application if
+	// it was provided.
 	VersionPreRelease string
 )
 
 func main() {
+	// Setup main logger.
 	output := os.Stdout
 	logger := log.NewFmtLogger(output)
 
+	/* Setup commands, subcommands and add them to the RootCommand. */
+
+	// server
+	cmd.ServerCommand.AddCommand(cmd.ServerStartCommand)
+	cmd.ServerCommand.AddCommand(cmd.ServerStatusCommand)
 	cmd.RootCommand.AddCommand(cmd.ServerCommand)
+
+	// version
 	cmd.RootCommand.AddCommand(cmd.VersionCommand)
 
+	// Execute the RootCommand and force exit if error.
 	err := cmd.Execute()
 	if err != nil {
 		logger.Log("ERROR:", err)

@@ -18,22 +18,28 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/goombaio/cli"
 )
 
-// ServerCommand ...
-var ServerCommand *cli.Command
+// ServerStartCommand ...
+var ServerStartCommand *cli.Command
 
 func init() {
-	cmdName := "server"
-	cmdShortDescription := "Manage a Goomba server"
+	cmdName := "start"
+	cmdShortDescription := "Start a Goomba server"
 
-	ServerCommand = cli.NewCommand(cmdName, cmdShortDescription)
-	ServerCommand.LongDescription = `server command manages a Goomba server 
-  cluster instance and their nodes`
-	ServerCommand.Run = func(c *cli.Command) error {
-		c.Usage()
+	ServerStartCommand = cli.NewCommand(cmdName, cmdShortDescription)
+	ServerStartCommand.LongDescription = `start command starts a Goomba server 
+  node and runs until an interrupt is received`
+	ServerStartCommand.Run = func(c *cli.Command) error {
+		// c.Usage()
+		//
+		// return nil
 
-		return nil
+		_, err := fmt.Fprintf(c.Output(), "%s\n", "Starting server..")
+
+		return err
 	}
 }
