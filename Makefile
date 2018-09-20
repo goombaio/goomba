@@ -100,118 +100,166 @@ dist:			## Generate distribution binaries and packages
 dist-linux-386:
 	$(eval GOOS=linux)
 	$(eval GOARCH=386)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-linux-amd64:
 	$(eval GOOS=linux)
 	$(eval GOARCH=amd64)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-linux-arm:
 	$(eval GOOS=linux)
 	$(eval GOARCH=arm)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-linux: dist-linux-386 dist-linux-amd64 dist-linux-arm
 
 dist-darwin-386:
 	$(eval GOOS=darwin)
 	$(eval GOARCH=386)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-darwin-amd64:
 	$(eval GOOS=darwin)
 	$(eval GOARCH=amd64)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-darwin: dist-darwin-386 dist-darwin-amd64
 
 dist-windows-386:
 	$(eval GOOS=windows)
 	$(eval GOARCH=386)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-windows-amd64:
 	$(eval GOOS=windows)
 	$(eval GOARCH=amd64)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.exe ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-windows: dist-windows-386 dist-windows-amd64
 
 dist-freebsd-386:
 	$(eval GOOS=freebsd)
 	$(eval GOARCH=386)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-freebsd-amd64:
 	$(eval GOOS=freebsd)
 	$(eval GOARCH=amd64)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-freebsd-arm:
 	$(eval GOOS=freebsd)
 	$(eval GOARCH=arm)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-freebsd: dist-freebsd-386 dist-freebsd-amd64 dist-freebsd-arm
 
 dist-openbsd-386:
 	$(eval GOOS=openbsd)
 	$(eval GOARCH=386)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-openbsd-amd64:
 	$(eval GOOS=openbsd)
 	$(eval GOARCH=amd64)
+	# Build
 	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
 	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	# Package
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	# Generate shasum
+	shasum ${DIST_FOLDER}/${GOOS}-${GOARCH}/* > ${DIST_FOLDER}/${GOOS}-${GOARCH}/${GOOS}-${GOARCH}.shasum
 
 dist-openbsd: dist-openbsd-386 dist-openbsd-amd64
 
