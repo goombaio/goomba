@@ -24,7 +24,19 @@ go get -u github.com/goombaio/goomba
 ## Example of use
 
 ```sh
-$ goomba --help
+$ goomba
+usage: goomba [-help] <command> [args]
+
+  A workflow based data pipeline framework for golang. https://goomba.io.
+
+Commands:
+  server        Runs a Goomba server
+  version       Show version information
+
+Flags:
+  -h, -help     Show help
+
+Use goomba [command] -help for more information about a command.
 ...
 ```
 
