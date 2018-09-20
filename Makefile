@@ -115,7 +115,16 @@ dist-linux-amd64:
 	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
 	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
 
-dist-linux: dist-linux-386 dist-linux-amd64
+dist-linux-arm:
+	$(eval GOOS=linux)
+	$(eval GOARCH=arm)
+	mkdir -p ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+	go build -v ${LDFLAGS} -o ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${MAIN_PACKAGE}
+	chmod +x ${BINARY}-${VERSION}-${GOOS}-${GOARCH}
+	zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH}.zip ${BINARY}-${VERSION}-${GOOS}-${GOARCH} ${DIST_INCLUDE_FILES}
+	mv ${BINARY}-${VERSION}* ${DIST_FOLDER}/${GOOS}-${GOARCH}/
+
+dist-linux: dist-linux-386 dist-linux-amd64 dist-linux-arm
 
 dist-darwin-386:
 	$(eval GOOS=darwin)
