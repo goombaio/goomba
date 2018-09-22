@@ -33,7 +33,7 @@ func init() {
 	ServerStartCommand = cli.NewCommand(cmdName, cmdShortDescription)
 	ServerStartCommand.LongDescription = `start command starts a Goomba server 
   node and runs until an interrupt is received`
-	ServerStartCommand.Run = func(c *cli.Command) error {
+	ServerStartCommand.Run = func(c *cli.Command, args []string) error {
 		// c.Usage()
 		//
 		// return nil

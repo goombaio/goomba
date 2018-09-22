@@ -30,7 +30,7 @@ func init() {
 
 	RootCommand = cli.NewCommand(appName, appShortDescription)
 	RootCommand.LongDescription = `A workflow based data pipeline framework for golang. https://goomba.io`
-	RootCommand.Run = func(c *cli.Command) error {
+	RootCommand.Run = func(c *cli.Command, args []string) error {
 		c.Usage()
 
 		return nil

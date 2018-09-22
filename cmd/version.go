@@ -39,7 +39,7 @@ func init() {
   ID that identifies a single build which has the same versionn, currently we 
   use the git hash as this ID. And finally, the third part is a timestamp that 
   reflects when the project was built`
-	VersionCommand.Run = func(c *cli.Command) error {
+	VersionCommand.Run = func(c *cli.Command, args []string) error {
 		// TODO:
 		// - Check if -h or --help is used and show subCommand Usage
 		//   https://github.com/goombaio/goomba/issues/1

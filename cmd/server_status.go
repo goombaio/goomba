@@ -33,7 +33,7 @@ func init() {
 	ServerStatusCommand = cli.NewCommand(cmdName, cmdShortDescription)
 	ServerStatusCommand.LongDescription = `status command get the status of the 
   Goomba server node and cluster`
-	ServerStatusCommand.Run = func(c *cli.Command) error {
+	ServerStatusCommand.Run = func(c *cli.Command, args []string) error {
 		// c.Usage()
 		//
 		// return nil
