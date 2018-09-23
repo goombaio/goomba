@@ -21,15 +21,10 @@ import (
 	"os"
 
 	"github.com/goombaio/goomba/cmd"
-	"github.com/goombaio/log"
 )
 
 func main() {
-	// Setup main logger.
-	output := os.Stdout
-	logger := log.NewFmtLogger(output)
-
-	// Setup commands, subcommands and add them to the root command
+	/* Setup commands, subcommands and add them to the RootCommand. */
 
 	// server
 	cmd.ServerCommand.AddCommand(cmd.ServerStartCommand)
@@ -42,7 +37,7 @@ func main() {
 	// Execute the RootCommand and force exit if error.
 	err := cmd.Execute()
 	if err != nil {
-		logger.Log("ERROR:", err)
+		cmd.RootCommand.Logger().Log("ERROR:", err)
 		os.Exit(1)
 	}
 }
