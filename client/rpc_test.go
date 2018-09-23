@@ -15,40 +15,4 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package cmd
-
-import (
-	"context"
-	"fmt"
-
-	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/client"
-)
-
-// ServerStatusCommand ...
-var ServerStatusCommand *cli.Command
-
-func init() {
-	ServerStatusCommand = cli.NewCommand("status", "Get the status of the Goomba server")
-	ServerStatusCommand.LongDescription = "status command get the status of the Goomba server node and cluster."
-	ServerStatusCommand.Run = func(c *cli.Command) error {
-		rc := &client.RPCClient{}
-
-		fmt.Printf("%#v\n", rc.Client)
-
-		defer rc.Close()
-
-		ctx := context.Background()
-		response, err := rc.Status(ctx)
-		if err != nil {
-			return err
-		}
-
-		_, err = fmt.Fprintf(c.Output(), "%s\n", response)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-}
+package client_test

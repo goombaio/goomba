@@ -19,7 +19,6 @@ package server
 
 // Request is the RPC request
 type Request struct {
-	Name string
 }
 
 // Response is the RPC response
@@ -34,7 +33,7 @@ type RPCServer struct {
 
 // Status is an exported method that a RPC client can use as the endpoint.
 func (rpcs *RPCServer) Status(req Request, res *Response) (err error) {
-	res.Message = "Hello World"
+	res.Message = "Status: OK"
 
 	return
 }

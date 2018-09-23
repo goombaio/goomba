@@ -18,9 +18,12 @@
 package server
 
 import (
+	"fmt"
 	"net"
 	"net/rpc"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/fatih/color"
@@ -66,7 +69,7 @@ func NewServer(name string) *Server {
 func (s *Server) Start() error {
 	s.logger.Log(loggerPrefixes, "Start", s.Name, "..")
 
-	rpc.RegisterName("Server", &RPCServer{})
+	rpc.Register(&RPCServer{})
 
 	listener, err := net.Listen("tcp", "0.0.0.0:7331")
 	if err != nil {
@@ -81,9 +84,9 @@ func (s *Server) Start() error {
 
 // Stop ...
 func (s *Server) Stop() error {
-	s.logger.Log(loggerPrefixes, "Stop", s.Name, "..")
-
 	if s.listener != nil {
+		s.logger.Log(loggerPrefixes, "Stop", s.Name, "..")
+
 		err := s.listener.Close()
 		if err != nil {
 			return err
@@ -91,4 +94,26 @@ func (s *Server) Stop() error {
 	}
 
 	return nil
+}
+
+// RunServer ...
+func RunServer() error {
+	server := NewServer("mainserver")
+
+	go func() {
+		handleSignals()
+		server.Stop()
+	}()
+
+	server.Start()
+
+	return nil
+}
+
+func handleSignals() {
+	signals := make(chan os.Signal, 1)
+
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+	<-signals
+	fmt.Println(" ==> signal received")
 }

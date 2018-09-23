@@ -15,40 +15,43 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package cmd
+package client
 
 import (
 	"context"
-	"fmt"
+	"net/rpc"
 
-	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/client"
+	"github.com/goombaio/goomba/server"
 )
 
-// ServerStatusCommand ...
-var ServerStatusCommand *cli.Command
+// RPCClient ...
+type RPCClient struct {
+	Client *rpc.Client
+}
 
-func init() {
-	ServerStatusCommand = cli.NewCommand("status", "Get the status of the Goomba server")
-	ServerStatusCommand.LongDescription = "status command get the status of the Goomba server node and cluster."
-	ServerStatusCommand.Run = func(c *cli.Command) error {
-		rc := &client.RPCClient{}
-
-		fmt.Printf("%#v\n", rc.Client)
-
-		defer rc.Close()
-
-		ctx := context.Background()
-		response, err := rc.Status(ctx)
+// Close terminates the underlying client.
+func (rc *RPCClient) Close() error {
+	if rc.Client != nil {
+		err := rc.Client.Close()
 		if err != nil {
 			return err
 		}
-
-		_, err = fmt.Fprintf(c.Output(), "%s\n", response)
-		if err != nil {
-			return err
-		}
-
-		return nil
 	}
+
+	return nil
+}
+
+// Status ...
+func (rc *RPCClient) Status(ctx context.Context) (string, error) {
+	var (
+		request  = &server.Request{}
+		response = new(server.Response)
+	)
+
+	err := rc.Client.Call("Status", request, response)
+	if err != nil {
+		return "", err
+	}
+
+	return response.Message, nil
 }
