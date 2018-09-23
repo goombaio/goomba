@@ -15,27 +15,26 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package cmd
+package server
 
-import (
-	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/server"
-)
+// Request is the RPC request
+type Request struct {
+	Name string
+}
 
-// ServerStartCommand ...
-var ServerStartCommand *cli.Command
+// Response is the RPC response
+type Response struct {
+	Message string
+}
 
-func init() {
-	ServerStartCommand = cli.NewCommand("start", "Start a Goomba server")
-	ServerStartCommand.LongDescription = `start command starts a Goomba server 
-  node and runs until an interrupt is received. The server represents a single 
-  node in a cluster.`
-	ServerStartCommand.Run = func(c *cli.Command) error {
-		server := server.NewServer("mainserver")
-		server.Start()
+// RPCServer holds the methods to be exposed by the RPC server as well as
+// properties that modify the methods' behavior.
+type RPCServer struct {
+}
 
-		defer server.Stop()
+// Status is an exported method that a RPC client can use as the endpoint.
+func (rpcs *RPCServer) Status(req Request, res *Response) (err error) {
+	res.Message = "Hello World"
 
-		return nil
-	}
+	return
 }

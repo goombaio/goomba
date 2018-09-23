@@ -1,6 +1,14 @@
+github.com/fatih/color v1.7.0 h1:DkWD4oS2D8LGGgTQ6IvwJJXSL5Vp2ffcQg58nFV38Ys=
+github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
 github.com/google/uuid v1.0.0 h1:b4Gk+7WdP/d3HZH8EJsZpvV7EtDOgaZLtnaNGIu1adA=
 github.com/google/uuid v1.0.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/goombaio/cli v0.0.0-20180923181325-ba35564f7b78 h1:fgtoC9AvvdFpxJPtszc2xNSAQYcTcCP7SHdY3iI9HjA=
 github.com/goombaio/cli v0.0.0-20180923181325-ba35564f7b78/go.mod h1:MNAULzjctNI2P2q5VSXWWbCG3QgJ7Cyff7mdO2gppP8=
 github.com/goombaio/log v0.0.0-20180919232442-e926f5158e55 h1:YB4vyh4CED/idyzYidZ7QJz6wVSSaaKTRIQDK2UBZnw=
 github.com/goombaio/log v0.0.0-20180919232442-e926f5158e55/go.mod h1:4SzIJyIMuV87Y+sY04tuNjStZP7juSaPsObSbKrClP0=
+github.com/mattn/go-colorable v0.0.9 h1:UVL0vNpWh04HeJXV0KLcaT7r06gOH2l4OW6ddYRUIY4=
+github.com/mattn/go-colorable v0.0.9/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
+github.com/mattn/go-isatty v0.0.4 h1:bnP0vzxcAdeI1zdubAl5PjU6zsERjGZb7raWodagDYs=
+github.com/mattn/go-isatty v0.0.4/go.mod h1:M+lRXTBqGeGNdLjl/ufCoiOlB5xdOkqRJdNxMWT7Zi4=
+golang.org/x/sys v0.0.0-20180921163948-d47a0f339242 h1:5DYsa+ZAwcJHjuY0Qet390sUr7qwkpnRsUNjddyc0b8=
+golang.org/x/sys v0.0.0-20180921163948-d47a0f339242/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=

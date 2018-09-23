@@ -18,11 +18,22 @@
 package server
 
 import (
+	"net"
+	"net/rpc"
 	"os"
+	"time"
 
+	"github.com/fatih/color"
 	"github.com/google/uuid"
 
 	"github.com/goombaio/log"
+)
+
+var (
+	loggerPrefixes = []string{
+		color.BlueString("server"),
+		color.GreenString(time.Now().Format(time.RFC850)),
+	}
 )
 
 // Server ...
@@ -36,6 +47,8 @@ type Server struct {
 
 	// logger is the custom log.Logger for the server
 	logger log.Logger
+
+	listener net.Listener
 }
 
 // NewServer ...
@@ -50,11 +63,32 @@ func NewServer(name string) *Server {
 }
 
 // Start ...
-func (s *Server) Start() {
-	s.logger.Log("Server", s.Name, "start..")
+func (s *Server) Start() error {
+	s.logger.Log(loggerPrefixes, "Start", s.Name, "..")
+
+	rpc.RegisterName("Server", &RPCServer{})
+
+	listener, err := net.Listen("tcp", "0.0.0.0:7331")
+	if err != nil {
+		return err
+	}
+	s.listener = listener
+
+	rpc.Accept(s.listener)
+
+	return nil
 }
 
 // Stop ...
-func (s *Server) Stop() {
-	s.logger.Log("Server", s.Name, "stop..")
+func (s *Server) Stop() error {
+	s.logger.Log(loggerPrefixes, "Stop", s.Name, "..")
+
+	if s.listener != nil {
+		err := s.listener.Close()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
