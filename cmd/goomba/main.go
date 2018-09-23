@@ -24,29 +24,12 @@ import (
 	"github.com/goombaio/log"
 )
 
-var (
-	// VersionSemVer is the current version number following the SemVer
-	// specification.
-	VersionSemVer string
-
-	// VersionBuildID is the current build ID (usually the latest git commit
-	// hash).
-	VersionBuildID string
-
-	// VersionTimestamp is the timestamp when this application have been build.
-	VersionTimestamp string
-
-	// VersionPreRelease is the pre-release tag string of this application if
-	// it was provided.
-	VersionPreRelease string
-)
-
 func main() {
 	// Setup main logger.
 	output := os.Stdout
 	logger := log.NewFmtLogger(output)
 
-	/* Setup commands, subcommands and add them to the RootCommand. */
+	// Setup commands, subcommands and add them to the root command
 
 	// server
 	cmd.ServerCommand.AddCommand(cmd.ServerStartCommand)

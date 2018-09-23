@@ -53,6 +53,9 @@ func init() {
 			PreRelease: "",
 		}
 		result, err := version.ShowVersion()
+		if err != nil {
+			return err
+		}
 
 		_, err = fmt.Fprintf(c.Output(), "%s\n", result)
 
