@@ -20,10 +20,31 @@ package main
 import (
 	"os"
 
+	"github.com/goombaio/goomba"
 	"github.com/goombaio/goomba/cmd"
 )
 
 func main() {
+	var (
+		// VersionSemVer ...
+		VersionSemVer string
+
+		// VersionBuildID ...
+		VersionBuildID string
+
+		// VersionTimestamp ...
+		VersionTimestamp string
+
+		// VersionPreRelease ...
+		VersionPreRelease string
+	)
+
+	_ = &goomba.Version{
+		SemVer:     VersionSemVer,
+		BuildID:    VersionBuildID,
+		Timestamp:  VersionTimestamp,
+		PreRelease: VersionPreRelease,
+	}
 	/* Setup commands, subcommands and add them to the RootCommand. */
 
 	// server
