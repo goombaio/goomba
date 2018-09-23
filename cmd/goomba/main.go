@@ -45,6 +45,7 @@ func main() {
 		Timestamp:  VersionTimestamp,
 		PreRelease: VersionPreRelease,
 	}
+
 	/* Setup commands, subcommands and add them to the RootCommand. */
 
 	// server
