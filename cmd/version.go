@@ -39,19 +39,25 @@ func init() {
   use the git hash as this ID. And finally, the third part is a timestamp that 
   reflects when the project was built.`
 	VersionCommand.Run = func(c *cli.Command) error {
-		// TODO:
-		// - Check if -h or --help is used and show subCommand Usage
-		//   https://github.com/goombaio/goomba/issues/1
-		// - By default only show SemVer & PreRelease is available
-		// - Add --long support and show all info if it is used
-		//   https://github.com/goombaio/goomba/issues/2
-
 		version := &goomba.Version{
 			SemVer:     "0.0.0",
 			BuildID:    "master-0000000",
 			Timestamp:  "0000-00-00.00:00:00.UTC",
-			PreRelease: "",
+			PreRelease: "dev",
 		}
+
+		longFlag := c.FlagName("-long")
+		if longFlag.Parsed {
+			result, err := version.ShowLongVersion()
+			if err != nil {
+				return err
+			}
+
+			_, err = fmt.Fprintf(c.Output(), "%s\n", result)
+
+			return err
+		}
+
 		result, err := version.ShowVersion()
 		if err != nil {
 			return err
@@ -61,4 +67,15 @@ func init() {
 
 		return err
 	}
+
+	LongVersionFlag := &cli.Flag{
+		ShortName:   "-l",
+		LongName:    "-long",
+		Description: "Show long version information",
+		Value:       "false",
+		Parsed:      false,
+	}
+
+	VersionCommand.AddFlag(LongVersionFlag)
+
 }
