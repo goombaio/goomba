@@ -1,3 +1,5 @@
+github.com/google/uuid v1.0.0 h1:b4Gk+7WdP/d3HZH8EJsZpvV7EtDOgaZLtnaNGIu1adA=
+github.com/google/uuid v1.0.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/goombaio/cli v0.0.0-20180923181325-ba35564f7b78 h1:fgtoC9AvvdFpxJPtszc2xNSAQYcTcCP7SHdY3iI9HjA=
 github.com/goombaio/cli v0.0.0-20180923181325-ba35564f7b78/go.mod h1:MNAULzjctNI2P2q5VSXWWbCG3QgJ7Cyff7mdO2gppP8=
 github.com/goombaio/log v0.0.0-20180919232442-e926f5158e55 h1:YB4vyh4CED/idyzYidZ7QJz6wVSSaaKTRIQDK2UBZnw=

@@ -15,26 +15,46 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package cmd
+package server
 
 import (
-	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/server"
+	"os"
+
+	"github.com/google/uuid"
+
+	"github.com/goombaio/log"
 )
 
-// ServerStartCommand ...
-var ServerStartCommand *cli.Command
+// Server ...
+type Server struct {
+	// Unique ID for the cluster node.
+	// Used for traceability, metrics, monitoring, etc ...
+	ID uuid.UUID
 
-func init() {
-	ServerStartCommand = cli.NewCommand("start", "Start a Goomba server")
-	ServerStartCommand.LongDescription = `start command starts a Goomba server 
-  node and runs until an interrupt is received. The server represents a single 
-  node in a cluster.`
-	ServerStartCommand.Run = func(c *cli.Command) error {
-		server := server.NewServer("mainserver")
-		server.Start()
-		server.Stop()
+	// Name of the cluster node.
+	Name string
 
-		return nil
+	// logger is the custom log.Logger for the server
+	logger log.Logger
+}
+
+// NewServer ...
+func NewServer(name string) *Server {
+	s := &Server{
+		ID:     uuid.New(),
+		Name:   name,
+		logger: log.NewFmtLogger(os.Stderr),
 	}
+
+	return s
+}
+
+// Start ...
+func (s *Server) Start() {
+	s.logger.Log("Server", s.Name, "start..")
+}
+
+// Stop ...
+func (s *Server) Stop() {
+	s.logger.Log("Server", s.Name, "stop..")
 }
