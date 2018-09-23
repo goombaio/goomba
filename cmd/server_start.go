@@ -31,13 +31,8 @@ func init() {
 	cmdShortDescription := "Start a Goomba server"
 
 	ServerStartCommand = cli.NewCommand(cmdName, cmdShortDescription)
-	ServerStartCommand.LongDescription = `start command starts a Goomba server 
-  node and runs until an interrupt is received`
-	ServerStartCommand.Run = func(c *cli.Command, args []string) error {
-		// c.Usage()
-		//
-		// return nil
-
+	ServerStartCommand.LongDescription = "start command starts a Goomba server node and runs until an interrupt is received."
+	ServerStartCommand.Run = func(c *cli.Command) error {
 		_, err := fmt.Fprintf(c.Output(), "%s\n", "Starting server..")
 
 		return err

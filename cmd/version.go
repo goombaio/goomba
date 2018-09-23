@@ -19,7 +19,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/goombaio/cli"
 	"github.com/goombaio/goomba"
@@ -38,20 +37,14 @@ func init() {
   canonical version following the semver specification. The second part is an 
   ID that identifies a single build which has the same versionn, currently we 
   use the git hash as this ID. And finally, the third part is a timestamp that 
-  reflects when the project was built`
-	VersionCommand.Run = func(c *cli.Command, args []string) error {
+  reflects when the project was built.`
+	VersionCommand.Run = func(c *cli.Command) error {
 		// TODO:
 		// - Check if -h or --help is used and show subCommand Usage
 		//   https://github.com/goombaio/goomba/issues/1
 		// - By default only show SemVer & PreRelease is available
 		// - Add --long support and show all info if it is used
 		//   https://github.com/goombaio/goomba/issues/2
-		//
-		// c.Usage()
-		//
-		// return nil
-
-		c.SetOutput(os.Stdout)
 
 		version := &goomba.Version{
 			SemVer:     "0.0.0",

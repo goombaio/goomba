@@ -25,12 +25,9 @@ import (
 var RootCommand *cli.Command
 
 func init() {
-	appName := "goomba"
-	appShortDescription := "Goomba CLI"
-
-	RootCommand = cli.NewCommand(appName, appShortDescription)
-	RootCommand.LongDescription = `A workflow based data pipeline framework for golang. https://goomba.io`
-	RootCommand.Run = func(c *cli.Command, args []string) error {
+	RootCommand = cli.NewCommand("goomba", "Goomba CLI")
+	RootCommand.LongDescription = "A workflow based data pipeline and ETL framework for golang. https://goomba.io"
+	RootCommand.Run = func(c *cli.Command) error {
 		c.Usage()
 
 		return nil

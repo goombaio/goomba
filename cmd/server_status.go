@@ -27,17 +27,9 @@ import (
 var ServerStatusCommand *cli.Command
 
 func init() {
-	cmdName := "status"
-	cmdShortDescription := "Get the status of the Goomba server"
-
-	ServerStatusCommand = cli.NewCommand(cmdName, cmdShortDescription)
-	ServerStatusCommand.LongDescription = `status command get the status of the 
-  Goomba server node and cluster`
-	ServerStatusCommand.Run = func(c *cli.Command, args []string) error {
-		// c.Usage()
-		//
-		// return nil
-
+	ServerStatusCommand = cli.NewCommand("status", "Get the status of the Goomba server")
+	ServerStatusCommand.LongDescription = "status command get the status of the Goomba server node and cluster."
+	ServerStatusCommand.Run = func(c *cli.Command) error {
 		_, err := fmt.Fprintf(c.Output(), "%s\n", "Goomba cluster status..")
 
 		return err

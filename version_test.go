@@ -57,8 +57,33 @@ func TestVersion_ShowVersion(t *testing.T) {
 		PreRelease: prerelease,
 	}
 
-	expectedVersionInfo := fmt.Sprintf("Goomba version %s-%s build %s at %s", semver, prerelease, buildid, timestamp)
+	// expectedVersionInfo := fmt.Sprintf("Goomba version %s-%s build %s at %s", semver, prerelease, buildid, timestamp)
+	expectedVersionInfo := fmt.Sprintf("Goomba version %s-%s", semver, prerelease)
 	versionInfo, err := version.ShowVersion()
+	if err != nil {
+		t.Fatalf("Expected no error but got %s", err)
+	}
+
+	if versionInfo != expectedVersionInfo {
+		t.Fatalf("Expected %q but got %q", expectedVersionInfo, versionInfo)
+	}
+}
+
+func TestVersion_ShowLongVersion(t *testing.T) {
+	semver := "1.2.3"
+	buildid := "master-b61ad71"
+	timestamp := "2018-09-17.06:58:24.UTC"
+	prerelease := "dev"
+
+	version := &goomba.Version{
+		SemVer:     semver,
+		BuildID:    buildid,
+		Timestamp:  timestamp,
+		PreRelease: prerelease,
+	}
+
+	expectedVersionInfo := fmt.Sprintf("Goomba version %s-%s build %s at %s", semver, prerelease, buildid, timestamp)
+	versionInfo, err := version.ShowLongVersion()
 	if err != nil {
 		t.Fatalf("Expected no error but got %s", err)
 	}

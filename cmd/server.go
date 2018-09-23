@@ -25,13 +25,9 @@ import (
 var ServerCommand *cli.Command
 
 func init() {
-	cmdName := "server"
-	cmdShortDescription := "Manage a Goomba server"
-
-	ServerCommand = cli.NewCommand(cmdName, cmdShortDescription)
-	ServerCommand.LongDescription = `server command manages a Goomba server 
-  cluster instance and their nodes`
-	ServerCommand.Run = func(c *cli.Command, args []string) error {
+	ServerCommand = cli.NewCommand("server", "Manage a Goomba server")
+	ServerCommand.LongDescription = "server command manages a Goomba server cluster instance and their nodes."
+	ServerCommand.Run = func(c *cli.Command) error {
 		c.Usage()
 
 		return nil
