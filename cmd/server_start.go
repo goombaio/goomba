@@ -31,8 +31,9 @@ func init() {
   node and runs until an interrupt is received. The server represents a single 
   node in a cluster.`
 	ServerStartCommand.Run = func(c *cli.Command) error {
-		err := server.Run()
+		server := server.NewServer()
+		server.Start()
 
-		return err
+		return nil
 	}
 }

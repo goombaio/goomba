@@ -18,7 +18,6 @@
 package server
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -51,12 +50,16 @@ type Server struct {
 }
 
 // NewServer ...
-func NewServer(name string) *Server {
+func NewServer() *Server {
 	s := &Server{
 		ID:     uuid.New(),
-		Name:   name,
+		Name:   "newserver",
 		logger: log.NewFmtLogger(os.Stderr),
 	}
+
+	seed := time.Now().UTC().UnixNano()
+	nameGenerator := namegenerator.NewNameGenerator(seed)
+	s.Name = nameGenerator.Generate()
 
 	return s
 }
@@ -65,7 +68,11 @@ func NewServer(name string) *Server {
 func (s *Server) Start() error {
 	_ = s.logger.Log(loggerPrefixes, "Start Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
 
-	return nil
+	// Listen for syscall signals to gracefully stop the server
+	s.handleSignals()
+
+	// Block forever
+	select {}
 }
 
 // Stop ...
@@ -75,28 +82,47 @@ func (s *Server) Stop() error {
 	return nil
 }
 
-// Run ...
-func Run() error {
-	seed := time.Now().UTC().UnixNano()
-	nameGenerator := namegenerator.NewNameGenerator(seed)
-	name := nameGenerator.Generate()
+// handleSignal ...
+func (s *Server) handleSignals() {
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
 
-	server := NewServer(name)
-
+	exitChan := make(chan int)
 	go func() {
-		handleSignals()
-		_ = server.Stop()
+		for {
+			sig := <-signalChan
+			switch sig {
+			// kill -SIGHUP XXXX
+			case syscall.SIGHUP:
+				_ = s.logger.Log(loggerPrefixes, "hungup")
+
+			// kill -SIGINT XXXX or Ctrl+c
+			case syscall.SIGINT:
+				_ = s.logger.Log(loggerPrefixes, "interrupt")
+				s.Stop()
+				exitChan <- 0
+
+			// kill -SIGTERM XXXX
+			case syscall.SIGTERM:
+				_ = s.logger.Log(loggerPrefixes, "force stop")
+				exitChan <- 0
+
+			// kill -SIGQUIT XXXX
+			case syscall.SIGQUIT:
+				_ = s.logger.Log(loggerPrefixes, "stop and core dump")
+				exitChan <- 0
+
+			default:
+				_ = s.logger.Log(loggerPrefixes, "Unknown signal.")
+				exitChan <- 1
+			}
+		}
 	}()
 
-	err := server.Start()
-
-	return err
-}
-
-func handleSignals() {
-	signals := make(chan os.Signal, 1)
-
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-	<-signals
-	fmt.Println(" ==> signal received")
+	code := <-exitChan
+	os.Exit(code)
 }
