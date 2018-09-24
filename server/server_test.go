@@ -35,8 +35,16 @@ func TestServer_Start(t *testing.T) {
 
 	server := server.NewServer(config)
 
-	go server.Start()
-	server.Stop()
+	go func() {
+		err := server.Start()
+		if err != nil {
+			t.Fatal(err)
+		}
+	}()
+	err := server.Stop()
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestServer_Restart(t *testing.T) {
@@ -45,9 +53,17 @@ func TestServer_Restart(t *testing.T) {
 
 	server := server.NewServer(config)
 
-	go server.Start()
-	go server.Restart()
-	server.Stop()
+	go func() {
+		go server.Start()
+		err := server.Restart()
+		if err != nil {
+			t.Fatal(err)
+		}
+	}()
+	err := server.Stop()
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestServer_Stop(t *testing.T) {
@@ -56,6 +72,14 @@ func TestServer_Stop(t *testing.T) {
 
 	server := server.NewServer(config)
 
-	go server.Start()
-	server.Stop()
+	go func() {
+		err := server.Start()
+		if err != nil {
+			t.Fatal(err)
+		}
+	}()
+	err := server.Stop()
+	if err != nil {
+		t.Fatal(err)
+	}
 }

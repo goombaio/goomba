@@ -41,9 +41,6 @@ type Server struct {
 
 	// logger is the custom log.Logger for the server
 	logger log.Logger
-
-	signalChan chan os.Signal
-	exitChan   chan int
 }
 
 // NewServer creates a new server given a configuration.
@@ -55,9 +52,6 @@ func NewServer(config *Config) *Server {
 		Name: config.Name,
 
 		logger: log.NewFmtLogger(config.LogOutput),
-
-		signalChan: make(chan os.Signal, 1),
-		exitChan:   make(chan int),
 	}
 
 	return s
@@ -98,11 +92,13 @@ func (s *Server) Stop() error {
 // handleSignal listens for syscall signals to gracefully stop, or restart a
 // server and itss belonging services.
 func (s *Server) handleSignals() {
-	signal.Notify(s.signalChan, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
+	exitChan := make(chan int)
 	go func() {
 		for {
-			sig := <-s.signalChan
+			sig := <-signalChan
 			switch sig {
 			// kill -SIGHUP XXXX
 			case syscall.SIGHUP:
@@ -113,28 +109,28 @@ func (s *Server) handleSignals() {
 			case syscall.SIGINT:
 				_ = s.logger.Log(s.config.LogPrefixes, "interrupt")
 				_ = s.Stop()
-				s.exitChan <- 0
+				exitChan <- 0
 
 			// kill -SIGTERM XXXX
 			case syscall.SIGTERM:
 				_ = s.logger.Log(s.config.LogPrefixes, "force stop")
 				_ = s.Stop()
-				s.exitChan <- 0
+				exitChan <- 0
 
 			// kill -SIGQUIT XXXX
 			case syscall.SIGQUIT:
 				_ = s.logger.Log(s.config.LogPrefixes, "stop and core dump")
 				_ = s.Stop()
-				s.exitChan <- 0
+				exitChan <- 0
 
 			default:
 				_ = s.logger.Log(s.config.LogPrefixes, "Unknown signal.")
 				_ = s.Stop()
-				s.exitChan <- 1
+				exitChan <- 1
 			}
 		}
 	}()
 
-	code := <-s.exitChan
+	code := <-exitChan
 	os.Exit(code)
 }
