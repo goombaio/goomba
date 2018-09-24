@@ -15,7 +15,14 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-/*
-Package goomba implements a disttibuted workflow based data pipeline framework.
-*/
-package goomba
+package server_test
+
+import (
+	"testing"
+
+	"github.com/goombaio/goomba/server"
+)
+
+func TestDefaultConfig(t *testing.T) {
+	_ = server.DefaultConfig()
+}

@@ -21,22 +21,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/google/uuid"
-	"github.com/goombaio/ansicolor"
 	"github.com/goombaio/log"
-	"github.com/goombaio/namegenerator"
 )
 
-var (
-	loggerPrefixes = []string{
-		ansicolor.ColorTrueColors("server", 39, 174, 96, 15, 15, 15),
-		ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 41, 128, 185, 15, 15, 15),
-	}
-)
-
-// Server ...
+// Server type represents the main server responsible to start, stop or restart
+// services as needed.
 type Server struct {
 	// Server configuration
 	config *Config
@@ -52,23 +43,23 @@ type Server struct {
 	logger log.Logger
 }
 
-// NewServer ...
+// NewServer creates a new server given a configuration.
 func NewServer(config *Config) *Server {
 	s := &Server{
 		config: config,
-		ID:     uuid.New(),
-		Name:   "server-node",
-		logger: log.NewFmtLogger(os.Stderr),
-	}
 
-	s.Name = s.generateRandomName()
+		ID:   config.ID,
+		Name: config.Name,
+
+		logger: log.NewFmtLogger(config.LogOutput),
+	}
 
 	return s
 }
 
-// Start ...
+// Start starts a server and  its belonging services.
 func (s *Server) Start() error {
-	_ = s.logger.Log(loggerPrefixes, "Start Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
+	_ = s.logger.Log(s.config.LogPrefixes, "Start server", "-", "Name:", s.Name, "-", "ID:", s.ID)
 
 	// Listen for syscall signals to gracefully stop the server
 	s.handleSignals()
@@ -77,35 +68,25 @@ func (s *Server) Start() error {
 	select {}
 }
 
-// Reload ...
-func (s *Server) Reload() error {
-	_ = s.logger.Log(loggerPrefixes, "Reload Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
-
-	return nil
-}
-
-// Restart ...
+// Restart reloads and restarts a server and its belonging services.
 func (s *Server) Restart() error {
-	_ = s.logger.Log(loggerPrefixes, "Restart Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
+	_ = s.logger.Log(s.config.LogPrefixes, "Restart server", "-", "Name:", s.Name, "-", "ID:", s.ID)
 
 	return nil
 }
 
-// Stop ...
+// Stop stops a server belonging services and the server itself.
 func (s *Server) Stop() error {
-	_ = s.logger.Log(loggerPrefixes, "Stop Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
+	_ = s.logger.Log(s.config.LogPrefixes, "Stop server", "-", "Name:", s.Name, "-", "ID:", s.ID)
 
 	return nil
 }
 
-// handleSignal ...
+// handleSignal listens for syscall signals to gracefully stop, or restart a
+// server and itss belonging services.
 func (s *Server) handleSignals() {
 	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
+	signal.Notify(signalChan, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	exitChan := make(chan int)
 	go func() {
@@ -114,30 +95,29 @@ func (s *Server) handleSignals() {
 			switch sig {
 			// kill -SIGHUP XXXX
 			case syscall.SIGHUP:
-				_ = s.logger.Log(loggerPrefixes, "hungup")
-				_ = s.Reload()
+				_ = s.logger.Log(s.config.LogPrefixes, "hungup")
 				_ = s.Restart()
 
 			// kill -SIGINT XXXX or Ctrl+c
 			case syscall.SIGINT:
-				_ = s.logger.Log(loggerPrefixes, "interrupt")
+				_ = s.logger.Log(s.config.LogPrefixes, "interrupt")
 				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGTERM XXXX
 			case syscall.SIGTERM:
-				_ = s.logger.Log(loggerPrefixes, "force stop")
+				_ = s.logger.Log(s.config.LogPrefixes, "force stop")
 				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGQUIT XXXX
 			case syscall.SIGQUIT:
-				_ = s.logger.Log(loggerPrefixes, "stop and core dump")
+				_ = s.logger.Log(s.config.LogPrefixes, "stop and core dump")
 				_ = s.Stop()
 				exitChan <- 0
 
 			default:
-				_ = s.logger.Log(loggerPrefixes, "Unknown signal.")
+				_ = s.logger.Log(s.config.LogPrefixes, "Unknown signal.")
 				_ = s.Stop()
 				exitChan <- 1
 			}
@@ -146,13 +126,4 @@ func (s *Server) handleSignals() {
 
 	code := <-exitChan
 	os.Exit(code)
-}
-
-// generateRandomName ...
-func (s *Server) generateRandomName() string {
-	seed := time.Now().UTC().UnixNano()
-	nameGenerator := namegenerator.NewNameGenerator(seed)
-	generatedName := nameGenerator.Generate()
-
-	return generatedName
 }

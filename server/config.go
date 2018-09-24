@@ -17,13 +17,43 @@
 
 package server
 
-// Config ...
+import (
+	"io"
+	"os"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/goombaio/ansicolor"
+	"github.com/goombaio/namegenerator"
+)
+
+// Config type represents a server configuration.
 type Config struct {
+	ID          uuid.UUID
+	Name        string
+	LogOutput   io.Writer
+	LogPrefixes []string
 }
 
-// DefaultConfig ...
+// DefaultConfig returns the server default configuration.
 func DefaultConfig() *Config {
-	c := &Config{}
+	c := &Config{
+		ID:          uuid.New(),
+		Name:        "server-name",
+		LogOutput:   os.Stderr,
+		LogPrefixes: []string{},
+	}
+
+	// generate a random name for this server
+	seed := time.Now().UTC().UnixNano()
+	nameGenerator := namegenerator.NewNameGenerator(seed)
+	c.Name = nameGenerator.Generate()
+
+	// logger prefixes
+	c.LogPrefixes = []string{
+		ansicolor.ColorTrueColors("server", 39, 174, 96, 15, 15, 15),
+		ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 41, 128, 185, 15, 15, 15),
+	}
 
 	return c
 }
