@@ -32,8 +32,8 @@ func init() {
   node in a cluster.`
 	ServerStartCommand.Run = func(c *cli.Command) error {
 		server := server.NewServer()
-		server.Start()
+		err := server.Start()
 
-		return nil
+		return err
 	}
 }

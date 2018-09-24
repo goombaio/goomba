@@ -103,21 +103,24 @@ func (s *Server) handleSignals() {
 			// kill -SIGINT XXXX or Ctrl+c
 			case syscall.SIGINT:
 				_ = s.logger.Log(loggerPrefixes, "interrupt")
-				s.Stop()
+				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGTERM XXXX
 			case syscall.SIGTERM:
 				_ = s.logger.Log(loggerPrefixes, "force stop")
+				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGQUIT XXXX
 			case syscall.SIGQUIT:
 				_ = s.logger.Log(loggerPrefixes, "stop and core dump")
+				_ = s.Stop()
 				exitChan <- 0
 
 			default:
 				_ = s.logger.Log(loggerPrefixes, "Unknown signal.")
+				_ = s.Stop()
 				exitChan <- 1
 			}
 		}
