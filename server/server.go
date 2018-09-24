@@ -26,16 +26,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fatih/color"
 	"github.com/google/uuid"
-
+	"github.com/goombaio/ansicolor"
 	"github.com/goombaio/log"
 )
 
 var (
 	loggerPrefixes = []string{
-		color.BlueString("server"),
-		color.GreenString(time.Now().Format(time.RFC850)),
+		ansicolor.ColorTrueColors("server", 76, 168, 67, 55, 55, 55),
+		ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 76, 168, 67, 55, 55, 55),
 	}
 )
 
