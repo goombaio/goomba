@@ -18,12 +18,46 @@
 package service_test
 
 import (
+	"io/ioutil"
 	"testing"
 
-	"github.com/goombaio/goomba/service"
+	"github.com/goombaio/goomba/server/service"
 )
 
-func TestNewService(t *testing.T) {
+func TestNewRPCService(t *testing.T) {
 	config := service.DefaultConfig()
-	_ = service.NewService(config)
+	_ = service.NewRPCService(config)
+}
+
+func TestNewRPCService_Start(t *testing.T) {
+	config := service.DefaultConfig()
+	config.LogOutput = ioutil.Discard
+	service := service.NewRPCService(config)
+
+	err := service.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestNewRPCService_Restart(t *testing.T) {
+	config := service.DefaultConfig()
+	config.LogOutput = ioutil.Discard
+	service := service.NewRPCService(config)
+
+	err := service.Restart()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestNewRPCService_Stop(t *testing.T) {
+	config := service.DefaultConfig()
+	config.LogOutput = ioutil.Discard
+	service := service.NewRPCService(config)
+
+	err := service.Stop()
+	if err != nil {
+		t.Fatal(err)
+	}
 }

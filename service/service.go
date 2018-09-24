@@ -17,44 +17,13 @@
 
 package service
 
-import (
-	"github.com/google/uuid"
-	"github.com/goombaio/log"
-)
+import "fmt"
 
-// Servicer interface defines hoow services are implemented
-type Servicer interface {
+// Service interface defines hoow services are implemented
+type Service interface {
 	Start() error
 	Restart() error
 	Stop() error
-}
 
-// Service type represents a service
-type Service struct {
-	// Service configuration
-	config *Config
-
-	// Unique service ID
-	// Used for traceability, metrics, monitoring, etc ...
-	ID uuid.UUID
-
-	// Name of the service.
-	Name string
-
-	// logger is the custom log.Logger for the service.
-	logger log.Logger
-}
-
-// NewService creates a new server given a configuration.
-func NewService(config *Config) *Service {
-	s := &Service{
-		config: config,
-
-		ID:   config.ID,
-		Name: config.Name,
-
-		logger: log.NewFmtLogger(config.LogOutput),
-	}
-
-	return s
+	fmt.Stringer
 }

@@ -20,7 +20,7 @@ package service_test
 import (
 	"testing"
 
-	"github.com/goombaio/goomba/service"
+	"github.com/goombaio/goomba/server/service"
 )
 
 func TestDefaultConfig(t *testing.T) {

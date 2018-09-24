@@ -20,6 +20,7 @@ package cmd
 import (
 	"github.com/goombaio/cli"
 	"github.com/goombaio/goomba/server"
+	"github.com/goombaio/goomba/server/service"
 )
 
 // ServerStartCommand ...
@@ -33,6 +34,15 @@ func init() {
 	ServerStartCommand.Run = func(c *cli.Command) error {
 		serverConfig := server.DefaultConfig()
 		server := server.NewServer(serverConfig)
+
+		// register services this server will manage
+
+		// rpc service
+		serviceConfig := service.DefaultConfig()
+		RPCService := service.NewRPCService(serviceConfig)
+		server.RegisterService(RPCService)
+
+		// start server and all its services
 		err := server.Start()
 
 		return err

@@ -26,6 +26,8 @@ import (
 
 func TestNewServer(t *testing.T) {
 	config := server.DefaultConfig()
+	config.LogOutput = ioutil.Discard
+
 	_ = server.NewServer(config)
 }
 

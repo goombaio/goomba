@@ -18,6 +18,7 @@
 package server
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -41,7 +42,7 @@ type Server struct {
 	Name string
 
 	// services are the services this server managees
-	services []*service.Servicer
+	services []service.Service
 
 	// logger is the custom log.Logger for the server
 	logger log.Logger
@@ -56,41 +57,55 @@ func NewServer(config *Config) *Server {
 		Name: config.Name,
 
 		logger: log.NewFmtLogger(config.LogOutput),
+
+		services: make([]service.Service, 0),
 	}
+
+	_ = s.logger.Log(s.config.LogPrefixes, "New server", "-", s.String())
 
 	return s
 }
 
 // Start starts a server and  its belonging services.
 func (s *Server) Start() error {
-	_ = s.logger.Log(s.config.LogPrefixes, "Start server", "-", "Name:", s.Name, "-", "ID:", s.ID)
+	err := s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
+	if err != nil {
+		return err
+	}
 
 	// Listen for syscall signals to gracefully stop the server
-	s.handleSignals()
+	defer s.handleSignals()
 
 	// Start services
+	for _, service := range s.services {
+		service.Start()
+	}
 
 	return nil
 }
 
 // Restart reloads and restarts a server and its belonging services.
 func (s *Server) Restart() error {
-	_ = s.logger.Log(s.config.LogPrefixes, "Restart server", "-", "Name:", s.Name, "-", "ID:", s.ID)
-
-	// Reload services
-
 	// Restart services
+	for _, service := range s.services {
+		service.Restart()
+	}
 
-	return nil
+	err := s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
+
+	return err
 }
 
 // Stop stops a server belonging services and the server itself.
 func (s *Server) Stop() error {
-	_ = s.logger.Log(s.config.LogPrefixes, "Stop server", "-", "Name:", s.Name, "-", "ID:", s.ID)
-
 	// Stop services
+	for _, service := range s.services {
+		service.Stop()
+	}
 
-	return nil
+	err := s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())
+
+	return err
 }
 
 // handleSignal listens for syscall signals to gracefully stop, or restart a
@@ -137,4 +152,22 @@ func (s *Server) handleSignals() {
 
 	code := <-exitChan
 	os.Exit(code)
+}
+
+// RegisterService registers a service in this server, this server then will
+// will control servicep's lifecycle.
+func (s *Server) RegisterService(service service.Service) error {
+	s.services = append(s.services, service)
+
+	err := s.logger.Log(s.config.LogPrefixes, "Register service", "-", service.String())
+
+	return err
+}
+
+// String implements fmt.Stringher interface and returns the string
+// representation of this type.
+func (s *Server) String() string {
+	str := fmt.Sprintf("Name: %s - ID: %s", s.Name, s.ID)
+
+	return str
 }
