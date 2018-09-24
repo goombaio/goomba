@@ -88,9 +88,9 @@ func (s *Server) Restart() error {
 		service.Restart()
 	}
 
-	err := s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
+	_ = s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
 
-	return err
+	return nil
 }
 
 // Stop stops a server belonging services and the server itself.
@@ -100,9 +100,9 @@ func (s *Server) Stop() error {
 		service.Stop()
 	}
 
-	err := s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())
+	_ = s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())
 
-	return err
+	return nil
 }
 
 // Services returns the service list managed by this server
@@ -161,9 +161,9 @@ func (s *Server) handleSignals() {
 func (s *Server) RegisterService(service service.Service) error {
 	s.services = append(s.services, service)
 
-	err := s.logger.Log(s.config.LogPrefixes, "Register service", "-", service.String())
+	_ = s.logger.Log(s.config.LogPrefixes, "Register service", "-", service.String())
 
-	return err
+	return nil
 }
 
 // String implements fmt.Stringher interface and returns the string

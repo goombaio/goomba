@@ -70,10 +70,7 @@ func (rs *RPCService) Start() error {
 		return err
 	}
 
-	err = rs.logger.Log(rs.config.LogPrefixes, "Start service", "-", rs.String())
-	if err != nil {
-		return err
-	}
+	_ = rs.logger.Log(rs.config.LogPrefixes, "Start service", "-", rs.String())
 
 	rs.listener = listener
 
@@ -98,9 +95,9 @@ func (rs *RPCService) Stop() error {
 		rs.listener.Close()
 	}
 
-	err := rs.logger.Log(rs.config.LogPrefixes, "Stop service", "-", rs.String())
+	_ = rs.logger.Log(rs.config.LogPrefixes, "Stop service", "-", rs.String())
 
-	return err
+	return nil
 }
 
 // String implements fmt.Stringer interface and returns the string
