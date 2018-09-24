@@ -75,12 +75,12 @@ func (rs *RPCService) Start() error {
 		return err
 	}
 
+	rs.listener = listener
+
 	go func() {
 		conn, _ := rs.listener.Accept()
 		go rpc.ServeConn(conn)
 	}()
-
-	rs.listener = listener
 
 	return nil
 }
