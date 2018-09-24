@@ -23,6 +23,7 @@ import (
 	"syscall"
 
 	"github.com/google/uuid"
+	"github.com/goombaio/goomba/service"
 	"github.com/goombaio/log"
 )
 
@@ -38,6 +39,9 @@ type Server struct {
 
 	// Name of the cluster node.
 	Name string
+
+	// services are the services this server managees
+	services []*service.Servicer
 
 	// logger is the custom log.Logger for the server
 	logger log.Logger
