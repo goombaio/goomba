@@ -38,6 +38,9 @@ var (
 
 // Server ...
 type Server struct {
+	// Server configuration
+	config *Config
+
 	// Unique ID for the cluster node.
 	// Used for traceability, metrics, monitoring, etc ...
 	ID uuid.UUID
@@ -50,16 +53,15 @@ type Server struct {
 }
 
 // NewServer ...
-func NewServer() *Server {
+func NewServer(config *Config) *Server {
 	s := &Server{
+		config: config,
 		ID:     uuid.New(),
-		Name:   "newserver",
+		Name:   "server-node",
 		logger: log.NewFmtLogger(os.Stderr),
 	}
 
-	seed := time.Now().UTC().UnixNano()
-	nameGenerator := namegenerator.NewNameGenerator(seed)
-	s.Name = nameGenerator.Generate()
+	s.Name = s.generateRandomName()
 
 	return s
 }
@@ -73,6 +75,20 @@ func (s *Server) Start() error {
 
 	// Block forever
 	select {}
+}
+
+// Reload ...
+func (s *Server) Reload() error {
+	_ = s.logger.Log(loggerPrefixes, "Reload Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
+
+	return nil
+}
+
+// Restart ...
+func (s *Server) Restart() error {
+	_ = s.logger.Log(loggerPrefixes, "Restart Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
+
+	return nil
 }
 
 // Stop ...
@@ -99,6 +115,8 @@ func (s *Server) handleSignals() {
 			// kill -SIGHUP XXXX
 			case syscall.SIGHUP:
 				_ = s.logger.Log(loggerPrefixes, "hungup")
+				_ = s.Reload()
+				_ = s.Restart()
 
 			// kill -SIGINT XXXX or Ctrl+c
 			case syscall.SIGINT:
@@ -128,4 +146,13 @@ func (s *Server) handleSignals() {
 
 	code := <-exitChan
 	os.Exit(code)
+}
+
+// generateRandomName ...
+func (s *Server) generateRandomName() string {
+	seed := time.Now().UTC().UnixNano()
+	nameGenerator := namegenerator.NewNameGenerator(seed)
+	generatedName := nameGenerator.Generate()
+
+	return generatedName
 }

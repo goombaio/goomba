@@ -15,26 +15,15 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package cmd
+package server
 
-import (
-	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/server"
-)
+// Config ...
+type Config struct {
+}
 
-// ServerStartCommand ...
-var ServerStartCommand *cli.Command
+// DefaultConfig ...
+func DefaultConfig() *Config {
+	c := &Config{}
 
-func init() {
-	ServerStartCommand = cli.NewCommand("start", "Start a Goomba server")
-	ServerStartCommand.LongDescription = `start command starts a Goomba server 
-  node and runs until an interrupt is received. The server represents a single 
-  node in a cluster.`
-	ServerStartCommand.Run = func(c *cli.Command) error {
-		serverConfig := server.DefaultConfig()
-		server := server.NewServer(serverConfig)
-		err := server.Start()
-
-		return err
-	}
+	return c
 }
