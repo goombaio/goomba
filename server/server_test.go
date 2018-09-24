@@ -64,6 +64,10 @@ func TestServer_Restart(t *testing.T) {
 
 	server := server.NewServer(config)
 
+	serviceConfig := service.DefaultConfig()
+	NopService := service.NewNopService(serviceConfig)
+	server.RegisterService(NopService)
+
 	go func() {
 		go server.Start()
 
@@ -87,6 +91,10 @@ func TestServer_Stop(t *testing.T) {
 	config.LogOutput = ioutil.Discard
 
 	server := server.NewServer(config)
+
+	serviceConfig := service.DefaultConfig()
+	NopService := service.NewNopService(serviceConfig)
+	server.RegisterService(NopService)
 
 	go func() {
 		err := server.Start()

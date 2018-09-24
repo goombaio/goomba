@@ -68,10 +68,7 @@ func NewServer(config *Config) *Server {
 
 // Start starts a server and  its belonging services.
 func (s *Server) Start() error {
-	err := s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
-	if err != nil {
-		return err
-	}
+	_ = s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
 
 	// Listen for syscall signals to gracefully stop the server
 	defer s.handleSignals()
