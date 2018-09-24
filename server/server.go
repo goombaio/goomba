@@ -108,6 +108,11 @@ func (s *Server) Stop() error {
 	return err
 }
 
+// Services returns the service list managed by this server
+func (s *Server) Services() []service.Service {
+	return s.services
+}
+
 // handleSignal listens for syscall signals to gracefully stop, or restart a
 // server and itss belonging services.
 func (s *Server) handleSignals() {

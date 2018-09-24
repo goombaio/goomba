@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/goombaio/goomba/server"
+	"github.com/goombaio/goomba/service"
 )
 
 func TestNewServer(t *testing.T) {
@@ -37,10 +38,18 @@ func TestServer_Start(t *testing.T) {
 
 	server := server.NewServer(config)
 
+	serviceConfig := service.DefaultConfig()
+	NopService := service.NewNopService(serviceConfig)
+	server.RegisterService(NopService)
+
 	go func() {
 		err := server.Start()
 		if err != nil {
 			t.Fatal(err)
+		}
+
+		for _, service := range server.Services() {
+			service.Start()
 		}
 	}()
 	err := server.Stop()
@@ -57,6 +66,11 @@ func TestServer_Restart(t *testing.T) {
 
 	go func() {
 		go server.Start()
+
+		for _, service := range server.Services() {
+			service.Restart()
+		}
+
 		err := server.Restart()
 		if err != nil {
 			t.Fatal(err)
@@ -80,6 +94,11 @@ func TestServer_Stop(t *testing.T) {
 			t.Fatal(err)
 		}
 	}()
+
+	for _, service := range server.Services() {
+		service.Stop()
+	}
+
 	err := server.Stop()
 	if err != nil {
 		t.Fatal(err)
