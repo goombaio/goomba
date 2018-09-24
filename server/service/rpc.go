@@ -19,6 +19,8 @@ package service
 
 import (
 	"fmt"
+	"net"
+	"net/rpc"
 
 	"github.com/google/uuid"
 	"github.com/goombaio/log"
@@ -38,6 +40,9 @@ type RPCService struct {
 
 	// logger is the custom log.Logger for the service.
 	logger log.Logger
+
+	// listener is the service net.Listener
+	listener net.Listener
 }
 
 // NewRPCService creates a new server given a configuration.
@@ -56,7 +61,26 @@ func NewRPCService(config *Config) *RPCService {
 
 // Start ...
 func (rs *RPCService) Start() error {
-	_ = rs.logger.Log(rs.config.LogPrefixes, "Start service", "-", rs.String())
+	rpcBackend := new(StatusResponse)
+
+	rpc.Register(rpcBackend)
+
+	listener, err := net.Listen("tcp", "0.0.0.0:7331")
+	if err != nil {
+		return err
+	}
+
+	err = rs.logger.Log(rs.config.LogPrefixes, "Start service", "-", rs.String())
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		conn, _ := rs.listener.Accept()
+		go rpc.ServeConn(conn)
+	}()
+
+	rs.listener = listener
 
 	return nil
 }
@@ -70,9 +94,13 @@ func (rs *RPCService) Restart() error {
 
 // Stop ...
 func (rs *RPCService) Stop() error {
-	_ = rs.logger.Log(rs.config.LogPrefixes, "Stop service", "-", rs.String())
+	if rs.listener != nil {
+		rs.listener.Close()
+	}
 
-	return nil
+	err := rs.logger.Log(rs.config.LogPrefixes, "Stop service", "-", rs.String())
+
+	return err
 }
 
 // String implements fmt.Stringer interface and returns the string

@@ -15,36 +15,22 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package cmd
+package service
 
-import (
-	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/server"
-	"github.com/goombaio/goomba/server/service"
-)
+import "fmt"
 
-// ServerStartCommand ...
-var ServerStartCommand *cli.Command
+// StatusRequest is the RPC Status request type
+type StatusRequest string
 
-func init() {
-	ServerStartCommand = cli.NewCommand("start", "Start a Goomba server")
-	ServerStartCommand.LongDescription = `start command starts a Goomba server 
-  node and runs until an interrupt is received. The server represents a single 
-  node in a cluster.`
-	ServerStartCommand.Run = func(c *cli.Command) error {
-		serverConfig := server.DefaultConfig()
-		server := server.NewServer(serverConfig)
+// StatusResponse is the RPC Status response type
+type StatusResponse string
 
-		// register services this server will manage
+// Status is our exposed RPC function
+func (c *StatusResponse) Status(args string, reply *string) error {
+	fmt.Printf("Args received: %s\n", args)
 
-		// rpc service
-		serviceConfig := service.DefaultConfig()
-		RPCService := service.NewRPCService(serviceConfig)
-		server.RegisterService(RPCService)
+	*c = "random value"
+	*reply = "This is the Status response"
 
-		// start server and all its services
-		go server.Start()
-
-		select {}
-	}
+	return nil
 }
