@@ -18,11 +18,7 @@
 package cmd
 
 import (
-	"context"
-	"fmt"
-
 	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/client"
 )
 
 // ServerStatusCommand ...
@@ -32,20 +28,8 @@ func init() {
 	ServerStatusCommand = cli.NewCommand("status", "Get the status of the Goomba server")
 	ServerStatusCommand.LongDescription = "status command get the status of the Goomba server node and cluster."
 	ServerStatusCommand.Run = func(c *cli.Command) error {
-		rc := &client.RPCClient{}
+		c.Usage()
 
-		fmt.Printf("%#v\n", rc.Client)
-
-		defer rc.Close()
-
-		ctx := context.Background()
-		response, err := rc.Status(ctx)
-		if err != nil {
-			return err
-		}
-
-		_, err = fmt.Fprintf(c.Output(), "%s\n", response)
-
-		return err
+		return nil
 	}
 }

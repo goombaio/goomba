@@ -6,3 +6,7 @@ github.com/goombaio/cli v0.0.0-20180924082521-6f66d2b33ad0 h1:mNiZqAHW+3ofl8WfX+
 github.com/goombaio/cli v0.0.0-20180924082521-6f66d2b33ad0/go.mod h1:3nPihUk3P4ivqVVx3nMPkHsCA1MJKGzSyYNhpfFDWL4=
 github.com/goombaio/log v0.0.0-20180923230028-df85bd62b48c h1:0VH2jGQmJJJw+QoobChK+F+I/X42xlDfZDYoARvak4M=
 github.com/goombaio/log v0.0.0-20180923230028-df85bd62b48c/go.mod h1:4SzIJyIMuV87Y+sY04tuNjStZP7juSaPsObSbKrClP0=
+github.com/goombaio/log v0.0.0-20180924084842-af6738f6adeb h1:Un8TPilltWbrLKYsYibNYRouKGejg4WXsJ5ZytSDbTg=
+github.com/goombaio/log v0.0.0-20180924084842-af6738f6adeb/go.mod h1:4SzIJyIMuV87Y+sY04tuNjStZP7juSaPsObSbKrClP0=
+github.com/goombaio/namegenerator v0.0.0-20180924084825-1104f958e491 h1:H/+YHRufY34P93G47tWlMVaXJgVFTghIvhe+1s7L0X0=
+github.com/goombaio/namegenerator v0.0.0-20180924084825-1104f958e491/go.mod h1:AFIo+02s+12CEg8Gzz9kzhCbmbq6JcKNrhHffCGA9z4=

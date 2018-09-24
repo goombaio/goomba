@@ -27,6 +27,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/goombaio/ansicolor"
 	"github.com/goombaio/log"
+	"github.com/goombaio/namegenerator"
 )
 
 var (
@@ -62,21 +63,25 @@ func NewServer(name string) *Server {
 
 // Start ...
 func (s *Server) Start() error {
-	_ = s.logger.Log(loggerPrefixes, "Start", s.Name, "..")
+	_ = s.logger.Log(loggerPrefixes, "Start Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
 
 	return nil
 }
 
 // Stop ...
 func (s *Server) Stop() error {
-	_ = s.logger.Log(loggerPrefixes, "Stop", s.Name, "..")
+	_ = s.logger.Log(loggerPrefixes, "Stop Goomba server -", "Name:", s.Name, "ID:", s.ID, "..")
 
 	return nil
 }
 
 // Run ...
 func Run() error {
-	server := NewServer("mainserver")
+	seed := time.Now().UTC().UnixNano()
+	nameGenerator := namegenerator.NewNameGenerator(seed)
+	name := nameGenerator.Generate()
+
+	server := NewServer(name)
 
 	go func() {
 		handleSignals()
