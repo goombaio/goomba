@@ -18,8 +18,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 	"github.com/goombaio/log"
 )
@@ -72,7 +70,7 @@ func (rs *NopService) Stop() error {
 // String implements fmt.Stringer interface and returns the string
 // representation of this type.
 func (rs *NopService) String() string {
-	str := fmt.Sprintf("Name: %s - ID: %s", rs.Name, rs.ID)
+	str := ""
 
 	return str
 }
