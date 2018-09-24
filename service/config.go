@@ -17,14 +17,29 @@
 
 package service
 
-import "fmt"
+import (
+	"io"
+	"io/ioutil"
 
-// Service interface defines hoow services are implemented
-type Service interface {
-	Start() error
-	Restart() error
-	Stop() error
+	"github.com/google/uuid"
+)
 
-	// Stringher interface
-	fmt.Stringer
+// Config type represents a server configuration.
+type Config struct {
+	ID          uuid.UUID
+	Name        string
+	LogOutput   io.Writer
+	LogPrefixes []string
+}
+
+// DefaultConfig returns the server default configuration.
+func DefaultConfig() *Config {
+	c := &Config{
+		ID:          uuid.New(),
+		Name:        "nop-service",
+		LogOutput:   ioutil.Discard,
+		LogPrefixes: []string{},
+	}
+
+	return c
 }
