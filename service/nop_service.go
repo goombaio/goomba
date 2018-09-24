@@ -27,7 +27,7 @@ import (
 // NopService type represents a service that does nothing
 type NopService struct {
 	// Service configuration
-	config *Config
+	config *NopConfig
 
 	// Unique service ID
 	// Used for traceability, metrics, monitoring, etc ...
@@ -41,7 +41,7 @@ type NopService struct {
 }
 
 // NewNopService creates a new service given a configuration.
-func NewNopService(config *Config) *NopService {
+func NewNopService(config *NopConfig) *NopService {
 	s := &NopService{
 		config: config,
 
