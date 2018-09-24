@@ -33,8 +33,8 @@ import (
 
 var (
 	loggerPrefixes = []string{
-		ansicolor.ColorTrueColors("server", 76, 168, 67, 55, 55, 55),
-		ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 76, 168, 67, 55, 55, 55),
+		ansicolor.ColorTrueColors("server", 39, 174, 96, 15, 15, 15),
+		ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 41, 128, 185, 15, 15, 15),
 	}
 )
 
