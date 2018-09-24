@@ -19,8 +19,6 @@ package server
 
 import (
 	"fmt"
-	"net"
-	"net/rpc"
 	"os"
 	"os/signal"
 	"syscall"
@@ -49,8 +47,6 @@ type Server struct {
 
 	// logger is the custom log.Logger for the server
 	logger log.Logger
-
-	listener net.Listener
 }
 
 // NewServer ...
@@ -66,47 +62,30 @@ func NewServer(name string) *Server {
 
 // Start ...
 func (s *Server) Start() error {
-	s.logger.Log(loggerPrefixes, "Start", s.Name, "..")
-
-	rpc.Register(&RPCServer{})
-
-	listener, err := net.Listen("tcp", "0.0.0.0:7331")
-	if err != nil {
-		return err
-	}
-	s.listener = listener
-
-	rpc.Accept(s.listener)
+	_ = s.logger.Log(loggerPrefixes, "Start", s.Name, "..")
 
 	return nil
 }
 
 // Stop ...
 func (s *Server) Stop() error {
-	if s.listener != nil {
-		s.logger.Log(loggerPrefixes, "Stop", s.Name, "..")
-
-		err := s.listener.Close()
-		if err != nil {
-			return err
-		}
-	}
+	_ = s.logger.Log(loggerPrefixes, "Stop", s.Name, "..")
 
 	return nil
 }
 
-// RunServer ...
-func RunServer() error {
+// Run ...
+func Run() error {
 	server := NewServer("mainserver")
 
 	go func() {
 		handleSignals()
-		server.Stop()
+		_ = server.Stop()
 	}()
 
-	server.Start()
+	err := server.Start()
 
-	return nil
+	return err
 }
 
 func handleSignals() {

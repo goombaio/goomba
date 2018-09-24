@@ -45,10 +45,7 @@ func init() {
 		}
 
 		_, err = fmt.Fprintf(c.Output(), "%s\n", response)
-		if err != nil {
-			return err
-		}
 
-		return nil
+		return err
 	}
 }

@@ -59,7 +59,7 @@ func main() {
 	// Execute the RootCommand and force exit if error.
 	err := cmd.Execute()
 	if err != nil {
-		cmd.RootCommand.Logger().Log("ERROR:", err)
+		_ = cmd.RootCommand.Logger().Log("ERROR:", err)
 		os.Exit(1)
 	}
 }
