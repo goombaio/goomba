@@ -60,13 +60,6 @@ func NewRPCService(config *Config) *RPCService {
 func (rs *RPCService) Start() error {
 	_ = rs.logger.Log(rs.config.LogPrefixes, "Start service", "-", rs.String())
 
-	rpcBackend := new(StatusResponse)
-
-	err := rpc.Register(rpcBackend)
-	if err != nil {
-		return err
-	}
-
 	listener, err := net.Listen("tcp", "0.0.0.0:7331")
 	if err != nil {
 		_ = rs.logger.Log(rs.config.LogPrefixes, "ERROR:", err)

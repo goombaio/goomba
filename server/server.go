@@ -174,7 +174,7 @@ func (s *Server) RegisterService(service service.Service) error {
 	return nil
 }
 
-// String implements fmt.Stringher interface and returns the string
+// String implements fmt.Stringer interface and returns the string
 // representation of this type.
 func (s *Server) String() string {
 	str := fmt.Sprintf("Name: %s - ID: %s", s.Name, s.ID)

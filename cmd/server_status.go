@@ -22,7 +22,7 @@ import (
 	"net/rpc"
 
 	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/server/service"
+	"github.com/goombaio/goomba/server"
 )
 
 // ServerStatusCommand ...
@@ -38,9 +38,9 @@ func init() {
 		}
 		defer client.Close()
 
-		var args service.StatusRequest
-		var reply service.StatusResponse
-		err = client.Call("StatusResponse.Status", &args, &reply)
+		var args server.StatusRequest
+		var reply server.StatusResponse
+		err = client.Call("RPCBackend.Status", &args, &reply)
 		if err != nil {
 			fmt.Printf("ERROR: %#v", err)
 			return err

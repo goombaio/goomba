@@ -15,9 +15,18 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package service
+package server
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
+
+// RPCBackend ...
+type RPCBackend struct {
+	Server *Server
+}
 
 // StatusRequest is the RPC Status request type
 type StatusRequest struct {
@@ -25,23 +34,23 @@ type StatusRequest struct {
 
 // StatusResponse is the RPC Status response type
 type StatusResponse struct {
-	Server Server
-}
-
-// Server ...
-type Server struct {
-	ID   string
-	Name string
+	Server struct {
+		ID   uuid.UUID
+		Name string
+	}
 }
 
 // Status is our exposed RPC function
-func (c *StatusResponse) Status(args *StatusRequest, reply *StatusResponse) error {
+func (s *RPCBackend) Status(args *StatusRequest, reply *StatusResponse) error {
 	fmt.Printf("Args: %#v\n", args)
 
 	*reply = StatusResponse{
-		Server: Server{
-			ID:   "server_id",
-			Name: "server_name",
+		Server: struct {
+			ID   uuid.UUID
+			Name string
+		}{
+			ID:   s.Server.ID,
+			Name: s.Server.Name,
 		},
 	}
 
