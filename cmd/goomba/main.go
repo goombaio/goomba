@@ -46,7 +46,7 @@ func main() {
 		PreRelease: VersionPreRelease,
 	}
 
-	/* Setup commands, subcommands and add them to the RootCommand. */
+	/* Setup commands, subcommands, flags and add them to the RootCommand. */
 
 	// server
 	cmd.ServerCommand.AddCommand(cmd.ServerStartCommand)
@@ -56,10 +56,9 @@ func main() {
 	// version
 	cmd.RootCommand.AddCommand(cmd.VersionCommand)
 
-	// Execute the RootCommand and force exit if error.
+	// Run cmd.Execute() method and force exit if error.
 	err := cmd.Execute()
 	if err != nil {
-		_ = cmd.RootCommand.Logger().Log("ERROR:", err)
 		os.Exit(1)
 	}
 }
