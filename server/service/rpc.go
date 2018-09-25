@@ -62,7 +62,10 @@ func (rs *RPCService) Start() error {
 
 	rpcBackend := new(StatusResponse)
 
-	rpc.Register(rpcBackend)
+	err := rpc.Register(rpcBackend)
+	if err != nil {
+		return err
+	}
 
 	listener, err := net.Listen("tcp", "0.0.0.0:7331")
 	if err != nil {

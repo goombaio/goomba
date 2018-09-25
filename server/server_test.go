@@ -40,18 +40,22 @@ func TestServer_Start(t *testing.T) {
 
 	serviceConfig := service.DefaultConfig()
 	NopService := service.NewNopService(serviceConfig)
-	server.RegisterService(NopService)
+	_ = server.RegisterService(NopService)
 
 	go func() {
-		err := server.Start()
-		if err != nil {
-			t.Fatal(err)
-		}
-
+		// start server
+		_ = server.Start()
+		// start services
 		for _, service := range server.Services() {
-			service.Start()
+			_ = service.Start()
 		}
 	}()
+
+	// stop services
+	for _, service := range server.Services() {
+		_ = service.Stop()
+	}
+	// stop server
 	err := server.Stop()
 	if err != nil {
 		t.Fatal(err)
@@ -66,21 +70,33 @@ func TestServer_Restart(t *testing.T) {
 
 	serviceConfig := service.DefaultConfig()
 	NopService := service.NewNopService(serviceConfig)
-	server.RegisterService(NopService)
+	_ = server.RegisterService(NopService)
 
 	go func() {
-		go server.Start()
-
+		// start server
+		_ = server.Start()
+		// start services
 		for _, service := range server.Services() {
-			service.Restart()
-		}
-
-		err := server.Restart()
-		if err != nil {
-			t.Fatal(err)
+			_ = service.Start()
 		}
 	}()
-	err := server.Stop()
+
+	// restart services
+	for _, service := range server.Services() {
+		_ = service.Restart()
+	}
+	// restart server
+	err := server.Restart()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// stop services
+	for _, service := range server.Services() {
+		_ = service.Stop()
+	}
+	// stop server
+	err = server.Stop()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,19 +110,22 @@ func TestServer_Stop(t *testing.T) {
 
 	serviceConfig := service.DefaultConfig()
 	NopService := service.NewNopService(serviceConfig)
-	server.RegisterService(NopService)
+	_ = server.RegisterService(NopService)
 
 	go func() {
-		err := server.Start()
-		if err != nil {
-			t.Fatal(err)
+		// start server
+		_ = server.Start()
+		// start services
+		for _, service := range server.Services() {
+			_ = service.Start()
 		}
 	}()
 
+	// stop services
 	for _, service := range server.Services() {
-		service.Stop()
+		_ = service.Stop()
 	}
-
+	// stop server
 	err := server.Stop()
 	if err != nil {
 		t.Fatal(err)

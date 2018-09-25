@@ -71,8 +71,10 @@ func (s *Server) Start() error {
 	_ = s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
 
 	// Start services
-	for _, service := range s.services {
-		go service.Start()
+	for _, registeredService := range s.services {
+		go func(registeredService service.Service) {
+			_ = registeredService.Start()
+		}(registeredService)
 	}
 
 	// Listen for syscall signals to gracefully stop the server
@@ -85,7 +87,10 @@ func (s *Server) Start() error {
 func (s *Server) Restart() error {
 	// Restart services
 	for _, service := range s.services {
-		service.Restart()
+		err := service.Restart()
+		if err != nil {
+			return err
+		}
 	}
 
 	_ = s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
@@ -97,7 +102,10 @@ func (s *Server) Restart() error {
 func (s *Server) Stop() error {
 	// Stop services
 	for _, service := range s.services {
-		service.Stop()
+		err := service.Stop()
+		if err != nil {
+			return err
+		}
 	}
 
 	_ = s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())

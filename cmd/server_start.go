@@ -46,7 +46,9 @@ func init() {
 		}
 
 		// start server and all its services
-		go server.Start()
+		go func() {
+			_ = server.Start()
+		}()
 
 		select {}
 	}
