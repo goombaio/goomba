@@ -20,17 +20,30 @@ package service
 import "fmt"
 
 // StatusRequest is the RPC Status request type
-type StatusRequest string
+type StatusRequest struct {
+}
 
 // StatusResponse is the RPC Status response type
-type StatusResponse string
+type StatusResponse struct {
+	Server Server
+}
+
+// Server ...
+type Server struct {
+	ID   string
+	Name string
+}
 
 // Status is our exposed RPC function
-func (c *StatusResponse) Status(args string, reply *string) error {
-	fmt.Printf("Args received: %s\n", args)
+func (c *StatusResponse) Status(args *StatusRequest, reply *StatusResponse) error {
+	fmt.Printf("Args: %#v\n", args)
 
-	*c = "random value"
-	*reply = "This is the Status response"
+	*reply = StatusResponse{
+		Server: Server{
+			ID:   "server_id",
+			Name: "server_name",
+		},
+	}
 
 	return nil
 }
