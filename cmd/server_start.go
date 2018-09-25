@@ -40,7 +40,10 @@ func init() {
 		// rpc service
 		serviceConfig := service.DefaultConfig()
 		RPCService := service.NewRPCService(serviceConfig)
-		server.RegisterService(RPCService)
+		err := server.RegisterService(RPCService)
+		if err != nil {
+			return err
+		}
 
 		// start server and all its services
 		go server.Start()

@@ -40,9 +40,6 @@ type RPCService struct {
 
 	// logger is the custom log.Logger for the service.
 	logger log.Logger
-
-	// listener is the service net.Listener
-	listener net.Listener
 }
 
 // NewRPCService creates a new server given a configuration.
@@ -67,17 +64,19 @@ func (rs *RPCService) Start() error {
 
 	listener, err := net.Listen("tcp", "0.0.0.0:7331")
 	if err != nil {
+		_ = rs.logger.Log(rs.config.LogPrefixes, "ERROR:", err)
 		return err
 	}
 
+	go func(listener net.Listener) {
+		conn, err := listener.Accept()
+		if err != nil {
+			_ = rs.logger.Log(rs.config.LogPrefixes, "ERROR:", err)
+		}
+		rpc.ServeConn(conn)
+	}(listener)
+
 	_ = rs.logger.Log(rs.config.LogPrefixes, "Start service", "-", rs.String())
-
-	rs.listener = listener
-
-	go func() {
-		conn, _ := rs.listener.Accept()
-		go rpc.ServeConn(conn)
-	}()
 
 	return nil
 }
@@ -91,10 +90,6 @@ func (rs *RPCService) Restart() error {
 
 // Stop ...
 func (rs *RPCService) Stop() error {
-	if rs.listener != nil {
-		rs.listener.Close()
-	}
-
 	_ = rs.logger.Log(rs.config.LogPrefixes, "Stop service", "-", rs.String())
 
 	return nil
