@@ -70,13 +70,13 @@ func NewServer(config *Config) *Server {
 func (s *Server) Start() error {
 	_ = s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
 
-	// Listen for syscall signals to gracefully stop the server
-	defer s.handleSignals()
-
 	// Start services
 	for _, service := range s.services {
-		service.Start()
+		go service.Start()
 	}
+
+	// Listen for syscall signals to gracefully stop the server
+	s.handleSignals()
 
 	return nil
 }
