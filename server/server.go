@@ -68,7 +68,7 @@ func NewServer(config *Config) *Server {
 
 // Start starts a server and  its belonging services.
 func (s *Server) Start() error {
-	_ = s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
+	s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
 
 	// Start services
 	for _, registeredService := range s.services {
@@ -93,7 +93,7 @@ func (s *Server) Restart() error {
 		}
 	}
 
-	_ = s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
+	s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
 
 	return nil
 }
@@ -108,7 +108,7 @@ func (s *Server) Stop() error {
 		}
 	}
 
-	_ = s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())
+	s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())
 
 	return nil
 }
@@ -131,29 +131,29 @@ func (s *Server) handleSignals() {
 			switch sig {
 			// kill -SIGHUP XXXX
 			case syscall.SIGHUP:
-				_ = s.logger.Log(s.config.LogPrefixes, "hungup")
+				s.logger.Log(s.config.LogPrefixes, "hungup")
 				_ = s.Restart()
 
 			// kill -SIGINT XXXX or Ctrl+c
 			case syscall.SIGINT:
-				_ = s.logger.Log(s.config.LogPrefixes, "interrupt")
+				s.logger.Log(s.config.LogPrefixes, "interrupt")
 				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGTERM XXXX
 			case syscall.SIGTERM:
-				_ = s.logger.Log(s.config.LogPrefixes, "force stop")
+				s.logger.Log(s.config.LogPrefixes, "force stop")
 				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGQUIT XXXX
 			case syscall.SIGQUIT:
-				_ = s.logger.Log(s.config.LogPrefixes, "stop and core dump")
+				s.logger.Log(s.config.LogPrefixes, "stop and core dump")
 				_ = s.Stop()
 				exitChan <- 0
 
 			default:
-				_ = s.logger.Log(s.config.LogPrefixes, "Unknown signal.")
+				s.logger.Log(s.config.LogPrefixes, "Unknown signal.")
 				_ = s.Stop()
 				exitChan <- 1
 			}
@@ -169,7 +169,7 @@ func (s *Server) handleSignals() {
 func (s *Server) RegisterService(service service.Service) error {
 	s.services = append(s.services, service)
 
-	_ = s.logger.Log(s.config.LogPrefixes, "Register service", "-", service.String())
+	s.logger.Log(s.config.LogPrefixes, "Register service", "-", service.String())
 
 	return nil
 }
