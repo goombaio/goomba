@@ -61,7 +61,7 @@ func NewServer(config *Config) *Server {
 		services: make([]service.Service, 0),
 	}
 
-	_ = s.logger.Log(s.config.LogPrefixes, "New server", "-", s.String())
+	s.logger.Log(s.config.LogPrefixes, "New server", "-", s.String())
 
 	return s
 }
