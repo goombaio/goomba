@@ -24,8 +24,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// NopConfig type represents a server configuration.
-type NopConfig struct {
+// NoopConfig type represents a server configuration.
+type NoopConfig struct {
 	ID          uuid.UUID
 	Name        string
 	LogOutput   io.Writer
@@ -33,10 +33,10 @@ type NopConfig struct {
 }
 
 // DefaultConfig returns the server default configuration.
-func DefaultConfig() *NopConfig {
-	c := &NopConfig{
+func DefaultConfig() *NoopConfig {
+	c := &NoopConfig{
 		ID:          uuid.New(),
-		Name:        "nop-service",
+		Name:        "Noop-service",
 		LogOutput:   ioutil.Discard,
 		LogPrefixes: []string{},
 	}
