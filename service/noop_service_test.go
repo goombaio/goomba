@@ -24,15 +24,15 @@ import (
 	"github.com/goombaio/goomba/service"
 )
 
-func TestNewNopService(t *testing.T) {
+func TestNewNoopService(t *testing.T) {
 	config := service.DefaultConfig()
-	_ = service.NewNopService(config)
+	_ = service.NewNoopService(config)
 }
 
-func TestNewNopService_Start(t *testing.T) {
+func TestNewNoopService_Start(t *testing.T) {
 	config := service.DefaultConfig()
 	config.LogOutput = ioutil.Discard
-	service := service.NewNopService(config)
+	service := service.NewNoopService(config)
 
 	err := service.Start()
 	if err != nil {
@@ -40,10 +40,10 @@ func TestNewNopService_Start(t *testing.T) {
 	}
 }
 
-func TestNewNopService_Restart(t *testing.T) {
+func TestNewNoopService_Restart(t *testing.T) {
 	config := service.DefaultConfig()
 	config.LogOutput = ioutil.Discard
-	service := service.NewNopService(config)
+	service := service.NewNoopService(config)
 
 	err := service.Restart()
 	if err != nil {
@@ -51,10 +51,10 @@ func TestNewNopService_Restart(t *testing.T) {
 	}
 }
 
-func TestNewNopService_Stop(t *testing.T) {
+func TestNewNoopService_Stop(t *testing.T) {
 	config := service.DefaultConfig()
 	config.LogOutput = ioutil.Discard
-	service := service.NewNopService(config)
+	service := service.NewNoopService(config)
 
 	err := service.Stop()
 	if err != nil {
@@ -62,10 +62,10 @@ func TestNewNopService_Stop(t *testing.T) {
 	}
 }
 
-func TestNopServiceString(t *testing.T) {
+func TestNoopServiceString(t *testing.T) {
 	config := service.DefaultConfig()
 	config.LogOutput = ioutil.Discard
-	service := service.NewNopService(config)
+	service := service.NewNoopService(config)
 
 	str := service.String()
 	if str != "" {
