@@ -22,22 +22,13 @@ import (
 )
 
 // RootCommand is the main Command of the application.
-var RootCommand *cli.Command
-
-func init() {
-	RootCommand = cli.NewCommand("goomba", "Goomba CLI")
-	RootCommand.LongDescription = "A workflow based data pipeline and ETL framework for golang. https://goomba.io"
-	RootCommand.Run = func(c *cli.Command) error {
+var RootCommand = &cli.Command{
+	Name:             "goomba",
+	ShortDescription: "Goomba CLI",
+	LongDescription:  "A workflow based data pipeline and ETL framework for golang. https://goomba.io",
+	Run: func(c *cli.Command) error {
 		c.Usage()
 
 		return nil
-	}
-}
-
-// Execute is the main entry point of the application, it just executes the
-// RootCommand action.
-func Execute() error {
-	err := RootCommand.Execute()
-
-	return err
+	},
 }

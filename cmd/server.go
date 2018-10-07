@@ -18,6 +18,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/goombaio/cli"
 )
 
@@ -28,6 +29,8 @@ func init() {
 	ServerCommand = cli.NewCommand("server", "Manage a Goomba server")
 	ServerCommand.LongDescription = "server command manages a Goomba server cluster instance and their nodes."
 	ServerCommand.Run = func(c *cli.Command) error {
+		fmt.Println("running server command")
+
 		c.Usage()
 
 		return nil
