@@ -39,8 +39,8 @@ func TestServer_Start(t *testing.T) {
 	server := server.NewServer(config)
 
 	serviceConfig := service.DefaultConfig()
-	NopService := service.NewNopService(serviceConfig)
-	_ = server.RegisterService(NopService)
+	NoopService := service.NewNoopService(serviceConfig)
+	_ = server.RegisterService(NoopService)
 
 	go func() {
 		// start server
@@ -69,8 +69,8 @@ func TestServer_Restart(t *testing.T) {
 	server := server.NewServer(config)
 
 	serviceConfig := service.DefaultConfig()
-	NopService := service.NewNopService(serviceConfig)
-	_ = server.RegisterService(NopService)
+	NoopService := service.NewNoopService(serviceConfig)
+	_ = server.RegisterService(NoopService)
 
 	go func() {
 		// start server
@@ -109,8 +109,8 @@ func TestServer_Stop(t *testing.T) {
 	server := server.NewServer(config)
 
 	serviceConfig := service.DefaultConfig()
-	NopService := service.NewNopService(serviceConfig)
-	_ = server.RegisterService(NopService)
+	NoopService := service.NewNoopService(serviceConfig)
+	_ = server.RegisterService(NoopService)
 
 	go func() {
 		// start server

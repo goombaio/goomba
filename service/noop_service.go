@@ -22,10 +22,10 @@ import (
 	"github.com/goombaio/log"
 )
 
-// NopService type represents a service that does nothing
-type NopService struct {
+// NoopService type represents a service that does nothing
+type NoopService struct {
 	// Service configuration
-	config *NopConfig
+	config *NoopConfig
 
 	// Unique service ID
 	// Used for traceability, metrics, monitoring, etc ...
@@ -38,13 +38,13 @@ type NopService struct {
 	logger log.Logger
 }
 
-// NewNopService creates a new service given a configuration.
-func NewNopService(config *NopConfig) *NopService {
-	s := &NopService{
+// NewNoopService creates a new service given a configuration.
+func NewNoopService(config *NoopConfig) *NoopService {
+	s := &NoopService{
 		config: config,
 
 		ID:   config.ID,
-		Name: "nop-service",
+		Name: "Noop-service",
 
 		logger: log.NewFmtLogger(config.LogOutput),
 	}
@@ -53,23 +53,23 @@ func NewNopService(config *NopConfig) *NopService {
 }
 
 // Start ...
-func (rs *NopService) Start() error {
+func (rs *NoopService) Start() error {
 	return nil
 }
 
 // Restart ...
-func (rs *NopService) Restart() error {
+func (rs *NoopService) Restart() error {
 	return nil
 }
 
 // Stop ...
-func (rs *NopService) Stop() error {
+func (rs *NoopService) Stop() error {
 	return nil
 }
 
 // String implements fmt.Stringer interface and returns the string
 // representation of this type.
-func (rs *NopService) String() string {
+func (rs *NoopService) String() string {
 	str := ""
 
 	return str
