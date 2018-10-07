@@ -20,6 +20,7 @@ package main
 import (
 	"os"
 
+	"github.com/goombaio/cli"
 	"github.com/goombaio/goomba"
 	"github.com/goombaio/goomba/cmd"
 )
@@ -46,7 +47,7 @@ func main() {
 		PreRelease: VersionPreRelease,
 	}
 
-	/* Setup commands, subcommands, flags and add them to the RootCommand. */
+	/* Setup commands, sub-commands, flags and add them to the RootCommand. */
 
 	// server
 	cmd.ServerCommand.AddCommand(cmd.ServerStartCommand)
@@ -57,7 +58,7 @@ func main() {
 	cmd.RootCommand.AddCommand(cmd.VersionCommand)
 
 	// Run cmd.Execute() method and force exit if error.
-	err := cmd.Execute()
+	err := cli.Execute(cmd.RootCommand)
 	if err != nil {
 		os.Exit(1)
 	}

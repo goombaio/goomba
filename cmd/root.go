@@ -32,17 +32,3 @@ var RootCommand = &cli.Command{
 		return nil
 	},
 }
-
-// Execute is the main entry point of the cli application.
-//
-// It will run  Command.Execute() base method that will parse for Commands,
-// SubCommands, Flags, Arguments and route to the appropiate place if no error
-// is found.
-func Execute() error {
-	err := RootCommand.Execute()
-	if err != nil {
-		_ = RootCommand.Logger().Log("ERROR:", err)
-	}
-
-	return nil
-}
