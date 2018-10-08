@@ -18,36 +18,12 @@
 package cmd
 
 import (
-	"fmt"
-	"net/rpc"
-
 	"github.com/goombaio/cli"
-	"github.com/goombaio/goomba/server"
 )
 
 // ServerStatusCommand ...
-var ServerStatusCommand *cli.Command
-
-func init() {
-	ServerStatusCommand = cli.NewCommand("status", "Get the status of the Goomba server")
-	ServerStatusCommand.LongDescription = "status command get the status of the Goomba server node and cluster."
-	ServerStatusCommand.Run = func(c *cli.Command) error {
-		client, err := rpc.Dial("tcp", "localhost:7331")
-		if err != nil {
-			return err
-		}
-		defer client.Close()
-
-		var args server.StatusRequest
-		var reply server.StatusResponse
-		err = client.Call("RPCBackend.Status", &args, &reply)
-		if err != nil {
-			fmt.Printf("ERROR: %#v", err)
-			return err
-		}
-
-		fmt.Printf("Result: %#v\n", reply)
-
-		return nil
-	}
+var ServerStatusCommand = &cli.Command{
+	Name:             "status",
+	ShortDescription: "Get the status of the Goomba server",
+	LongDescription:  "status command get the status of the Goomba server node and cluster.",
 }

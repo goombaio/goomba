@@ -18,38 +18,20 @@
 package cmd
 
 import (
-	"net/rpc"
-
 	"github.com/goombaio/cli"
 	"github.com/goombaio/goomba/server"
-	"github.com/goombaio/goomba/server/service"
 )
 
 // ServerStartCommand ...
-var ServerStartCommand *cli.Command
-
-func init() {
-	ServerStartCommand = cli.NewCommand("start", "Start a Goomba server")
-	ServerStartCommand.LongDescription = `start command starts a Goomba server 
+var ServerStartCommand = &cli.Command{
+	Name:             "start",
+	ShortDescription: "Start a Goomba server",
+	LongDescription: `start command starts a Goomba server 
   node and runs until an interrupt is received. The server represents a single 
-  node in a cluster.`
-	ServerStartCommand.Run = func(c *cli.Command) error {
+  node in a cluster.`,
+	Run: func(c *cli.Command) error {
 		serverConfig := server.DefaultConfig()
 		s := server.NewServer(serverConfig)
-
-		// register services this server will manage
-		rpcbackend := &server.RPCBackend{
-			Server: s,
-		}
-		rpc.Register(rpcbackend)
-
-		serviceConfig := service.DefaultConfig()
-		RPCService := service.NewRPCService(serviceConfig)
-
-		err := s.RegisterService(RPCService)
-		if err != nil {
-			return err
-		}
 
 		// start server and all its services
 		go func() {
@@ -57,5 +39,5 @@ func init() {
 		}()
 
 		select {}
-	}
+	},
 }
