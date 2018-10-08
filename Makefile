@@ -4,12 +4,13 @@ PACKAGES = $(shell go list ./...)
 VERSION=`cat VERSION`
 BUILD=`git symbolic-ref HEAD 2> /dev/null | cut -b 12-`-`git log --pretty=format:%h -1`
 TIMESTAMP=`date -u '+%Y-%m-%d.%H:%M:%S.%Z'`
+PRE_RELEASE=$(ENV)
 DIST_BUILD=bin
 DIST_FOLDER=dist
 DIST_INCLUDE_FILES=README.md LICENSE VERSION AUTHORS CONTRIBUTORS
 
 # Setup -ldflags option for go build here, interpolate the variable values
-LDFLAGS=-ldflags "-X main.VersionSemVer=${VERSION} -X main.VersionBuildID=${BUILD} -X main.VersionTimestamp=${TIMESTAMP}"
+LDFLAGS=-ldflags "-X main.VersionSemVer=${VERSION} -X main.VersionBuildID=${BUILD} -X main.VersionTimestamp=${TIMESTAMP} -X main.VersionPreRelease=${PRE_RELEASE}"
 
 # Build & Install
 
