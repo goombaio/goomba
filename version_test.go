@@ -27,20 +27,20 @@ import (
 func TestVersion(t *testing.T) {
 	version := &goomba.Version{}
 
-	if version.SemVer != "" {
-		t.Fatalf("SemVer expected to be blank but got %s", version.SemVer)
+	if version.VersionSemVer != "" {
+		t.Fatalf("SemVer expected to be blank but got %s", version.VersionSemVer)
 	}
 
-	if version.BuildID != "" {
-		t.Fatalf("BuildID expected to be blank but got %s", version.BuildID)
+	if version.VersionBuildID != "" {
+		t.Fatalf("BuildID expected to be blank but got %s", version.VersionBuildID)
 	}
 
-	if version.Timestamp != "" {
-		t.Fatalf("Timestamp expected to be blank but got %s", version.Timestamp)
+	if version.VersionTimestamp != "" {
+		t.Fatalf("Timestamp expected to be blank but got %s", version.VersionTimestamp)
 	}
 
-	if version.PreRelease != "" {
-		t.Fatalf("Timestamp expected to be blank but got %s", version.PreRelease)
+	if version.VersionPreRelease != "" {
+		t.Fatalf("Timestamp expected to be blank but got %s", version.VersionPreRelease)
 	}
 }
 
@@ -51,10 +51,10 @@ func TestVersion_ShowVersion(t *testing.T) {
 	prerelease := "dev"
 
 	version := &goomba.Version{
-		SemVer:     semver,
-		BuildID:    buildid,
-		Timestamp:  timestamp,
-		PreRelease: prerelease,
+		VersionSemVer:     semver,
+		VersionBuildID:    buildid,
+		VersionTimestamp:  timestamp,
+		VersionPreRelease: prerelease,
 	}
 
 	// expectedVersionInfo := fmt.Sprintf("Goomba version %s-%s build %s at %s", semver, prerelease, buildid, timestamp)
@@ -76,10 +76,10 @@ func TestVersion_ShowLongVersion(t *testing.T) {
 	prerelease := "dev"
 
 	version := &goomba.Version{
-		SemVer:     semver,
-		BuildID:    buildid,
-		Timestamp:  timestamp,
-		PreRelease: prerelease,
+		VersionSemVer:     semver,
+		VersionBuildID:    buildid,
+		VersionTimestamp:  timestamp,
+		VersionPreRelease: prerelease,
 	}
 
 	expectedVersionInfo := fmt.Sprintf("Goomba version %s-%s build %s at %s", semver, prerelease, buildid, timestamp)
