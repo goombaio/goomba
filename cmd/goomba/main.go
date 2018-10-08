@@ -25,27 +25,26 @@ import (
 	"github.com/goombaio/goomba/cmd"
 )
 
+var (
+	// VersionSemVer ...
+	VersionSemVer string
+
+	// VersionBuildID ...
+	VersionBuildID string
+
+	// VersionTimestamp ...
+	VersionTimestamp string
+
+	// VersionPreRelease ...
+	VersionPreRelease string
+)
+
 func main() {
-	var (
-		// VersionSemVer ...
-		VersionSemVer string
-
-		// VersionBuildID ...
-		VersionBuildID string
-
-		// VersionTimestamp ...
-		VersionTimestamp string
-
-		// VersionPreRelease ...
-		VersionPreRelease string
-	)
-
-	_ = &goomba.Version{
-		SemVer:     VersionSemVer,
-		BuildID:    VersionBuildID,
-		Timestamp:  VersionTimestamp,
-		PreRelease: VersionPreRelease,
-	}
+	v := goomba.GetVersion()
+	v.VersionSemVer = VersionSemVer
+	v.VersionBuildID = VersionBuildID
+	v.VersionTimestamp = VersionTimestamp
+	v.VersionPreRelease = VersionPreRelease
 
 	/* Setup commands, sub-commands, flags and add them to the RootCommand. */
 

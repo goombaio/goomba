@@ -19,33 +19,39 @@ package goomba
 
 import (
 	"bytes"
+	"sync"
 	"text/template"
 )
 
 const (
 	// VersionTemplate is the tempate used to render the version information.
-	VersionTemplate = `Goomba version {{.SemVer}}{{if .PreRelease}}-{{.PreRelease}}{{end}}`
+	VersionTemplate = `Goomba version {{.VersionSemVer}}{{if .VersionPreRelease}}-{{.VersionPreRelease}}{{end}}`
 
 	// LongVersionTemplate is the tempate used to render the version
 	// information.
-	LongVersionTemplate = `Goomba version {{.SemVer}}{{if .PreRelease}}-{{.PreRelease}}{{end}} build {{.BuildID}} at {{.Timestamp}}`
+	LongVersionTemplate = `Goomba version {{.VersionSemVer}}{{if .VersionPreRelease}}-{{.VersionPreRelease}}{{end}} build {{.VersionBuildID}} at {{.VersionTimestamp}}`
 )
 
-// Version ...
+var (
+	version *Version
+
+	once sync.Once
+)
+
+// Version type defines the version information about the application.
 type Version struct {
-	// SemVer is the current version number following the SemVer
-	// specification.
-	SemVer string
+	// VersionSemVer is the sermver based number of the app
+	VersionSemVer string
 
-	// BuildID is the current build ID (usually the latest git commit hash).
-	BuildID string
+	// VersionBuildID is the latest commit hash
+	VersionBuildID string
 
-	// Timestamp is the timestamp when this application have been build.
-	Timestamp string
+	// VersionTimestamp represents when the application was built
+	VersionTimestamp string
 
-	// PreRelease is the pre-release tag string of this application if it was
-	// provided.
-	PreRelease string
+	// VersionPreRelease is a pre-release tag for the application
+	// like release-candidate, beta, dev, etc ...
+	VersionPreRelease string
 }
 
 // ShowVersion shows the short version information.
@@ -66,4 +72,13 @@ func (v *Version) ShowLongVersion() (string, error) {
 	err := t.Execute(buf, v)
 
 	return buf.String(), err
+}
+
+// GetVersion singleton pattern implementation
+func GetVersion() *Version {
+	once.Do(func() {
+		version = &Version{}
+	})
+
+	return version
 }
