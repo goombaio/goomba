@@ -57,9 +57,10 @@ func main() {
 	// version
 	cmd.RootCommand.AddCommand(cmd.VersionCommand)
 
-	// Run cmd.Execute() method and force exit if error.
+	// Run cli.Execute() method and force exit if error.
 	err := cli.Execute(cmd.RootCommand)
 	if err != nil {
+		cmd.RootCommand.Logger().Log("ERROR:", err)
 		os.Exit(1)
 	}
 }
