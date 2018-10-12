@@ -22,7 +22,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
+	"github.com/goombaio/ansicolor"
 	"github.com/goombaio/goomba/service"
 	"github.com/goombaio/log"
 )
@@ -44,7 +46,7 @@ type Server struct {
 	services []service.Service
 
 	// logger is the custom log.Logger for the server
-	logger log.Logger
+	logger *log.ContextLogger
 }
 
 // NewServer creates a new server given a configuration.
@@ -55,19 +57,22 @@ func NewServer(config *Config) *Server {
 		GUID: config.GUID,
 		Name: config.Name,
 
-		logger: log.NewFmtLogger(config.LogOutput),
+		logger: log.NewContextLogger(config.LogOutput),
 
 		services: make([]service.Service, 0),
 	}
 
-	s.logger.Log(s.config.LogPrefixes, "New server", "-", s.String())
+	s.logger.AddPrefix(ansicolor.ColorTrueColors(fmt.Sprintf("%T", s), 39, 174, 96, 15, 15, 15))
+	s.logger.AddPrefix(ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 41, 128, 185, 15, 15, 15))
+
+	s.logger.Log("New server", "-", s.String())
 
 	return s
 }
 
 // Start starts a server and  its belonging services.
 func (s *Server) Start() error {
-	s.logger.Log(s.config.LogPrefixes, "Start server", "-", s.String())
+	s.logger.Log("Start server", "-", s.String())
 
 	// Start services
 	for _, registeredService := range s.services {
@@ -92,7 +97,7 @@ func (s *Server) Restart() error {
 		}
 	}
 
-	s.logger.Log(s.config.LogPrefixes, "Restart server", "-", s.String())
+	s.logger.Log("Restart server", "-", s.String())
 
 	return nil
 }
@@ -107,7 +112,7 @@ func (s *Server) Stop() error {
 		}
 	}
 
-	s.logger.Log(s.config.LogPrefixes, "Stop server", "-", s.String())
+	s.logger.Log("Stop server", "-", s.String())
 
 	return nil
 }
@@ -130,29 +135,29 @@ func (s *Server) handleSignals() {
 			switch sig {
 			// kill -SIGHUP XXXX
 			case syscall.SIGHUP:
-				s.logger.Log(s.config.LogPrefixes, "hungup")
+				s.logger.Log("hungup")
 				_ = s.Restart()
 
 			// kill -SIGINT XXXX or Ctrl+c
 			case syscall.SIGINT:
-				s.logger.Log(s.config.LogPrefixes, "interrupt")
+				s.logger.Log("interrupt")
 				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGTERM XXXX
 			case syscall.SIGTERM:
-				s.logger.Log(s.config.LogPrefixes, "force stop")
+				s.logger.Log("force stop")
 				_ = s.Stop()
 				exitChan <- 0
 
 			// kill -SIGQUIT XXXX
 			case syscall.SIGQUIT:
-				s.logger.Log(s.config.LogPrefixes, "stop and core dump")
+				s.logger.Log("stop and core dump")
 				_ = s.Stop()
 				exitChan <- 0
 
 			default:
-				s.logger.Log(s.config.LogPrefixes, "Unknown signal.")
+				s.logger.Log("Unknown signal.")
 				_ = s.Stop()
 				exitChan <- 1
 			}
@@ -168,7 +173,7 @@ func (s *Server) handleSignals() {
 func (s *Server) RegisterService(service service.Service) error {
 	s.services = append(s.services, service)
 
-	s.logger.Log(s.config.LogPrefixes, "Register service", "-", service.String())
+	s.logger.Log("Register service", "-", service.String())
 
 	return nil
 }
@@ -176,7 +181,7 @@ func (s *Server) RegisterService(service service.Service) error {
 // String implements fmt.Stringer interface and returns the string
 // representation of this type.
 func (s *Server) String() string {
-	str := fmt.Sprintf("Name: %s - ID: %s", s.Name, s.GUID)
+	str := fmt.Sprintf("Name: %s - GUID: %s", s.Name, s.GUID)
 
 	return str
 }

@@ -22,7 +22,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/goombaio/ansicolor"
 	"github.com/goombaio/guid"
 	"github.com/goombaio/namegenerator"
 )
@@ -38,29 +37,21 @@ func init() {
 
 // Config type represents a server configuration.
 type Config struct {
-	GUID        string
-	Name        string
-	LogOutput   io.Writer
-	LogPrefixes []string
+	GUID      string
+	Name      string
+	LogOutput io.Writer
 }
 
 // DefaultConfig returns the server default configuration.
 func DefaultConfig() *Config {
 	c := &Config{
-		GUID:        guid.New(),
-		Name:        "default-server-name",
-		LogOutput:   os.Stderr,
-		LogPrefixes: []string{},
+		GUID:      guid.New(),
+		Name:      "default-server-name",
+		LogOutput: os.Stderr,
 	}
 
 	nameGenerator := namegenerator.NewNameGenerator(seed)
 	c.Name = nameGenerator.Generate()
-
-	// logger prefixes
-	c.LogPrefixes = []string{
-		ansicolor.ColorTrueColors("server", 39, 174, 96, 15, 15, 15),
-		ansicolor.ColorTrueColors(time.Now().Format(time.RFC850), 41, 128, 185, 15, 15, 15),
-	}
 
 	return c
 }
