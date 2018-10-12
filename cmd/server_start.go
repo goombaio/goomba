@@ -30,14 +30,18 @@ var ServerStartCommand = &cli.Command{
   node and runs until an interrupt is received. The server represents a single 
   node in a cluster.`,
 	Run: func(c *cli.Command) error {
+		// get server default configuration
 		serverConfig := server.DefaultConfig()
+
+		// create a new server
 		s := server.NewServer(serverConfig)
 
-		// start server and all its services
+		// start the server
 		go func() {
 			_ = s.Start()
 		}()
 
+		// TODO: Handle server events?
 		select {}
 	},
 }

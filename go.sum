@@ -1,9 +1,9 @@
-github.com/google/uuid v1.0.0 h1:b4Gk+7WdP/d3HZH8EJsZpvV7EtDOgaZLtnaNGIu1adA=
-github.com/google/uuid v1.0.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/goombaio/ansicolor v0.0.0-20180925191811-fa6507c8ad5d h1:VM25tXPoqD7uTDIYc1sXJRZtMeYLds5Cm9sHU6oes0I=
 github.com/goombaio/ansicolor v0.0.0-20180925191811-fa6507c8ad5d/go.mod h1:Ohi5yz8qt6oi+eMy7AF4iMg2M6GOY2O83gOtV1SafXI=
-github.com/goombaio/cli v0.0.0-20181008010738-92c0891c5e5b h1:pYEhRIZUid44VDRxynHj1gcSdxGzbfhAnmnqG4tODMo=
-github.com/goombaio/cli v0.0.0-20181008010738-92c0891c5e5b/go.mod h1:6ej5b4UPelYZ/V7jhofJ1x2kA7C/mTvUAQivda90AZo=
+github.com/goombaio/cli v0.0.0-20181012000517-dd3ad5c13f49 h1:5Xq6VJFyk4QmcCmHwOvpfC3LUzprm/DZNjTdzjHI3gA=
+github.com/goombaio/cli v0.0.0-20181012000517-dd3ad5c13f49/go.mod h1:6ej5b4UPelYZ/V7jhofJ1x2kA7C/mTvUAQivda90AZo=
+github.com/goombaio/guid v0.0.0-20181007000110-321220bbf0df h1:spmXlNTpyc/I2iAmE8YKgwtlIWu5vTdRVWpsK0+8wxs=
+github.com/goombaio/guid v0.0.0-20181007000110-321220bbf0df/go.mod h1:pa7ONw9gi9bdnhdMqmuBmhycL9qaKwFX/8uWx6l0G3Y=
 github.com/goombaio/log v0.0.0-20181006234330-b2d335e3400f h1:21GLgI6/a5nsO1F3zuQAiFRUVAxmRDF6Bu1ykem/gKw=
 github.com/goombaio/log v0.0.0-20181006234330-b2d335e3400f/go.mod h1:4SzIJyIMuV87Y+sY04tuNjStZP7juSaPsObSbKrClP0=
 github.com/goombaio/namegenerator v0.0.0-20181006234301-989e774b106e h1:XmA6L9IPRdUr28a+SK/oMchGgQy159wvzXA5tJ7l+40=
