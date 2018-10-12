@@ -38,7 +38,7 @@ func init() {
 
 // Config type represents a server configuration.
 type Config struct {
-	ID          string
+	GUID        string
 	Name        string
 	LogOutput   io.Writer
 	LogPrefixes []string
@@ -47,8 +47,8 @@ type Config struct {
 // DefaultConfig returns the server default configuration.
 func DefaultConfig() *Config {
 	c := &Config{
-		ID:          guid.New(),
-		Name:        "server-name",
+		GUID:        guid.New(),
+		Name:        "default-server-name",
 		LogOutput:   os.Stderr,
 		LogPrefixes: []string{},
 	}

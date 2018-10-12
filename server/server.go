@@ -35,7 +35,7 @@ type Server struct {
 
 	// Unique GUID for the cluster node.
 	// Used for traceability, metrics, monitoring, etc ...
-	ID string
+	GUID string
 
 	// Name of the cluster node.
 	Name string
@@ -52,7 +52,7 @@ func NewServer(config *Config) *Server {
 	s := &Server{
 		config: config,
 
-		ID:   config.ID,
+		GUID: config.GUID,
 		Name: config.Name,
 
 		logger: log.NewFmtLogger(config.LogOutput),
@@ -176,7 +176,7 @@ func (s *Server) RegisterService(service service.Service) error {
 // String implements fmt.Stringer interface and returns the string
 // representation of this type.
 func (s *Server) String() string {
-	str := fmt.Sprintf("Name: %s - ID: %s", s.Name, s.ID)
+	str := fmt.Sprintf("Name: %s - ID: %s", s.Name, s.GUID)
 
 	return str
 }
