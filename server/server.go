@@ -23,7 +23,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/google/uuid"
 	"github.com/goombaio/goomba/service"
 	"github.com/goombaio/log"
 )
@@ -34,9 +33,9 @@ type Server struct {
 	// Server configuration
 	config *Config
 
-	// Unique ID for the cluster node.
+	// Unique GUID for the cluster node.
 	// Used for traceability, metrics, monitoring, etc ...
-	ID uuid.UUID
+	ID string
 
 	// Name of the cluster node.
 	Name string

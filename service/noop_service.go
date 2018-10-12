@@ -18,7 +18,6 @@
 package service
 
 import (
-	"github.com/google/uuid"
 	"github.com/goombaio/log"
 )
 
@@ -29,7 +28,7 @@ type NoopService struct {
 
 	// Unique service ID
 	// Used for traceability, metrics, monitoring, etc ...
-	ID uuid.UUID
+	ID string
 
 	// Name of the service.
 	Name string

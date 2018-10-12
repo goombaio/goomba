@@ -21,12 +21,12 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/google/uuid"
+	"github.com/goombaio/guid"
 )
 
 // NoopConfig type represents a server configuration.
 type NoopConfig struct {
-	ID          uuid.UUID
+	ID          string
 	Name        string
 	LogOutput   io.Writer
 	LogPrefixes []string
@@ -35,7 +35,7 @@ type NoopConfig struct {
 // DefaultConfig returns the server default configuration.
 func DefaultConfig() *NoopConfig {
 	c := &NoopConfig{
-		ID:          uuid.New(),
+		ID:          guid.New(),
 		Name:        "Noop-service",
 		LogOutput:   ioutil.Discard,
 		LogPrefixes: []string{},

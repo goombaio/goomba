@@ -22,14 +22,23 @@ import (
 	"os"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/goombaio/ansicolor"
+	"github.com/goombaio/guid"
 	"github.com/goombaio/namegenerator"
 )
 
+var (
+	seed int64
+)
+
+func init() {
+	// generate a random name for this server
+	seed = time.Now().UTC().UnixNano()
+}
+
 // Config type represents a server configuration.
 type Config struct {
-	ID          uuid.UUID
+	ID          string
 	Name        string
 	LogOutput   io.Writer
 	LogPrefixes []string
@@ -38,14 +47,12 @@ type Config struct {
 // DefaultConfig returns the server default configuration.
 func DefaultConfig() *Config {
 	c := &Config{
-		ID:          uuid.New(),
+		ID:          guid.New(),
 		Name:        "server-name",
 		LogOutput:   os.Stderr,
 		LogPrefixes: []string{},
 	}
 
-	// generate a random name for this server
-	seed := time.Now().UTC().UnixNano()
 	nameGenerator := namegenerator.NewNameGenerator(seed)
 	c.Name = nameGenerator.Generate()
 
